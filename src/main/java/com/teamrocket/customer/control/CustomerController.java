@@ -6,8 +6,10 @@ import com.teamrocket.customer.service.TemplateService;
 import com.teamrocket.customer.dto.TemplateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
@@ -27,5 +29,6 @@ public record CustomerController(CustomerService customerService) {
     public void customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         log.info("New customer registered {}", customerRegistrationRequest);
         customerService.registerCustomer(customerRegistrationRequest);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 }
