@@ -1,12 +1,15 @@
-# Spring_Rest_Template
+# Customer service
 
-TO DO:
-  - cucumber
+### TO DO:
+  - BDD  
+  - TDD
   - pipeline integration
-  - pmd (mutation tets)
-  - jacoco
-  - pitest
-  - docker integration
+  - Mutation tests
   - logging
-  - flyway
-  - discuss test types amd levels
+  - flyway or H2
+  - Kafka  
+  - Camunda  
+  - Cloud contract  
+  - gRPC  
+  - Transactional  
+  - 

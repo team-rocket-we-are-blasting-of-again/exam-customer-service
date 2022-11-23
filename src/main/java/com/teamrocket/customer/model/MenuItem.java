@@ -11,8 +11,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "menu_item")
+public class MenuItem {
 
     @Id
     @SequenceGenerator(
@@ -24,21 +24,11 @@ public class Customer {
             generator = "customer_id_sequence"
     )
     private int id;
-    @Column(name = "first_name")
+    @Column(name = "name")
     @NotNull
-    private String firstName;
-    @Column(name = "last_name")
+    private String name;
+    @Column(name = "description")
     @NotNull
-    private String lastName;
-    @Column(name = "email")
-    @NotNull
-    private String email;
-    @Column(name = "address_id")
-    @NotNull
-    private int addressId;
-    @Column(name = "phone_number")
-    @NotNull
-    private String phone;
-    // TODO orders: List<CustomerOrder>
+    private String description;
 
 }
