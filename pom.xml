@@ -9,13 +9,23 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.teamrocket</groupId>
-    <artifactId>Template</artifactId>
+    <artifactId>Customer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Template</name>
-    <description>Template</description>
+    <name>Customer</name>
+    <description>Customer</description>
+    <url>https://www.jplm.dk</url>
+
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <cucumber.version>7.7.0</cucumber.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring.boot.maven.plugin.version>2.7.5</spring.boot.maven.plugin.version>
+        <spring.boot.dependencies.version>2.7.5</spring.boot.dependencies.version>
+        <spring-cloud-contract.version>2.1.2.RELEASE</spring-cloud-contract.version>
+        <spring-cloud.version>Hoxton.BUILD-SNAPSHOT</spring-cloud.version>
     </properties>
 
     <!-- Dependencies -->
@@ -35,6 +45,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- Used for submodules if we built it that way -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -43,7 +61,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -52,6 +69,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -104,11 +143,43 @@
             <type>pom</type>
         </dependency>
 
+        <!-- Producer contract testing -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <version>2.1.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- Build -->
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>2.1.1.RELEASE</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <baseClassForTests>
+                        com.teamrocket.customer.control.CustomerController
+                    </baseClassForTests>
+                </configuration>
+            </plugin>
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.springframework.cloud</groupId>-->
+            <!--                <artifactId>spring-cloud-contract-maven-plugin</artifactId>-->
+            <!--                <version>2.1.2.RELEASE</version>-->
+            <!--                <extensions>true</extensions>-->
+            <!--                <configuration>-->
+            <!--                                        <baseClassForTests>com.example.contractTest.BaseTestClass</baseClassForTests>-->
+            <!--                    <baseClassForTests>com.teamrocket.customer.control.CustomerController</baseClassForTests>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -124,6 +195,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.maven.plugin.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>
