@@ -164,7 +164,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>
-                        com.teamrocket.customer.control.CustomerController
+                        com.teamrocket.customer.contract.producer.BaseTestClass
                     </baseClassForTests>
                 </configuration>
             </plugin>
@@ -257,7 +257,7 @@
                                     <limits>
                                         <limit>
                                             <counter>INSTRUCTION</counter>
-                                            <minimum>50.0%</minimum>
+                                            <minimum>0.0%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
