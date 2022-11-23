@@ -1,0 +1,13 @@
+[
+  {
+    "requestPath": "/customer/**",
+    "forwardUri": "http://customer:8080",
+    "routePathDto": [
+      {
+        "path": "/customer/**",
+        "method": "BEARER",
+        "rolesAllowed": ["CUSTOMER"]
+      }
+    ]
+  }
+]

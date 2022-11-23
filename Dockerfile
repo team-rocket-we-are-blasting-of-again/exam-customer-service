@@ -1,5 +1,4 @@
-FROM openjdk:17-bullseye
-WORKDIR /app
-COPY target/*.jar /app/application.jar
+FROM tobiaszimmer/exam-gateway-subscription:java-17
 
-CMD [ "java", "-jar", "/app/application.jar" ]
+COPY target/*.jar /application.jar
+COPY gateway-routes.json /gateway-routes.json
