@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     networks:
-      postgres:
+      customer:
   camunda:
     container_name: camunda
     image: tobiaszimmer/exam-camunda-server:processUpdate-0.0.3
@@ -24,7 +24,7 @@ services:
       CAMUNDA_ADMIN_FIRSTNAME: admin
       CAMUNDA_ADMIN_LASTNAME: admin
     networks:
-      postgres:
+      customer:
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -33,7 +33,7 @@ services:
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
     networks:
-      postgres:
+      customer:
   kafka:
     image: bitnami/kafka:latest
     ports:
@@ -46,7 +46,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       ALLOW_PLAINTEXT_LISTENER: "yes"
     networks:
-      postgres:
+      customer:
 
   postgres:
     container_name: postgres
@@ -60,7 +60,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - customer
     restart: unless-stopped
 
   pgadmin:
@@ -76,44 +76,16 @@ services:
     ports:
       - "5050:80"
     networks:
-      - postgres
+      - customer
     restart: unless-stopped
 
 networks:
-  postgres:
+  customer:
     driver: bridge
-    #external: true
+    external: true
 
 volumes:
   postgres:
   pgadmin:
   zookeeper:
   kafka:
-#
-#services:
-#  customer:
-#    image: teamrocket-customer-service:1.0
-#    container_name: customer-service
-#    depends_on:
-#      - customerdb
-#    ports:
-#      - "8012:8012"
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://customerdb:5432/postgres
-#      - SPRING_DATASOURCE_USERNAME=postgres
-#      - SPRING_DATASOURCE_PASSWORD=postgres
-#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-#    networks:
-#      school:
-#  customerdb:
-#    image: postgres:13.1-alpine
-#    container_name: customerdb
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    networks:
-#      mtogo:
-#
-#networks:
-#  mtogo:
-#    external: true
