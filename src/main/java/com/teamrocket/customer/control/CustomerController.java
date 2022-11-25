@@ -29,9 +29,9 @@ public class CustomerController {
     //public record CustomerController(CustomerService customerService) {
 
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    private CamundaService camundaService;
+    private final CamundaService camundaService;
 
     /**
      * POST REQUEST
