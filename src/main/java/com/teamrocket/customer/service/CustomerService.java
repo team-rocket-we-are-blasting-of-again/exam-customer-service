@@ -1,20 +1,36 @@
 package com.teamrocket.customer.service;
 
+import com.teamrocket.AuthServiceGrpc;
+import com.teamrocket.NewCustomer;
+import com.teamrocket.VerifiedUser;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.repository.CustomerRepository;
+import io.grpc.stub.annotations.GrpcGenerated;
+import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
-public record CustomerService(CustomerRepository customerRepository) implements ICustomerService {
+public class CustomerService implements ICustomerService {
+
+    @GrpcClient("grpc-service")
+    private AuthServiceGrpc.AuthServiceBlockingStub unaryCall;
+
+    private final CustomerRepository customerRepository;
+
     @Override
+    @Transactional
     public ResponseEntity<Customer> registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -25,9 +41,19 @@ public record CustomerService(CustomerRepository customerRepository) implements 
         // TODO: check if email is valid
         // TODO: check if email is not taken
         // TODO: gRPC call
-        customerRepository.save(customer);
+        Customer newCustomer = customerRepository.save(customer);
 
-        return ResponseEntity.ok(customer);
+        NewCustomer authService = NewCustomer.newBuilder()
+                .setEmail(customer.getEmail())
+                .setPassword(request.password())
+                .setRoleId(newCustomer.getId())
+                .build();
+
+        VerifiedUser unaryCallCustomer = unaryCall.createCustomer(authService);
+
+        // TODO: EMIT CUSTOMER EVENT when customer has been verified
+
+        return ResponseEntity.ok(newCustomer);
     }
 
     @Override

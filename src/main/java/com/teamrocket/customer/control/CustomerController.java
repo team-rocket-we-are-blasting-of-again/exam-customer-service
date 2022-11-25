@@ -1,12 +1,17 @@
 package com.teamrocket.customer.control;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.teamrocket.customer.dto.CamundaStartOrderProcess;
+import com.teamrocket.customer.dto.NewOrder;
 import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
+import com.teamrocket.customer.service.CamundaService;
 import com.teamrocket.customer.service.CustomerService;
 import com.teamrocket.customer.service.TemplateService;
 import com.teamrocket.customer.dto.TemplateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +27,14 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 //@RequiredArgsConstructor
-//public class CustomerController {
-public record CustomerController(CustomerService customerService) {
+public class CustomerController {
+    //public record CustomerController(CustomerService customerService) {
 // TODO: REMOVE comments when controller is done
 
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private CamundaService camundaService;
 //    private final TemplateService templateService;
 //
 //    @GetMapping
@@ -59,6 +68,18 @@ public record CustomerController(CustomerService customerService) {
         log.info("Customers was fetched with id: {}", id);
         return customerService.getCustomerById(id);
     }
+
+    @PostMapping("/customer-new-order")
+    public String createNewOrder(@RequestBody NewOrder newOrder) throws JsonProcessingException {
+        return camundaService.startOrderProcess(newOrder);
+    }
+
+//    @GetMapping("/customer-new-order")
+//    public CamundaStartOrderProcess createNewOrder() {
+//        CamundaStartOrderProcess camundaStartOrderProcess = new CamundaStartOrderProcess();
+//        camundaStartOrderProcess.setVariables(new CamundaStartOrderProcess.CamundaOrder(new NewOrder(), "json"));
+//        return camundaStartOrderProcess;
+//    }
 
     /**
      * PUT REQUEST

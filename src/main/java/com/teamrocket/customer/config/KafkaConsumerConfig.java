@@ -14,7 +14,7 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 public class KafkaConsumerConfig {
 
     private final KafkaUtil kafkaUtil;
-    // TODO: IMPLEMENT REAL DTO
+    // TODO: IMPLEMENT REAL CUSTOMERDTO - objekt fra kafka
     @Bean
     public ConsumerFactory<String, TemplateDTO> messageConsumerFactory() {
         return this.kafkaUtil.createClassConsumerFactory(TemplateDTO.class);

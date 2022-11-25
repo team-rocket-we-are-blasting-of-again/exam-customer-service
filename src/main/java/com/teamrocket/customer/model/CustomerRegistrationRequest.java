@@ -6,6 +6,7 @@ public record CustomerRegistrationRequest(
         String lastName,
         String email,
         int addressId,
-        String phone
+        String phone,
+        String password
 ) {
 }
