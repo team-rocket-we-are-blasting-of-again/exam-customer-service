@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     networks:
-      camunda:
+      postgres:
   camunda:
     container_name: camunda
     image: tobiaszimmer/exam-camunda-server:processUpdate-0.0.3
@@ -24,7 +24,7 @@ services:
       CAMUNDA_ADMIN_FIRSTNAME: admin
       CAMUNDA_ADMIN_LASTNAME: admin
     networks:
-      camunda:
+      postgres:
 
   zookeeper:
     image: bitnami/zookeeper:latest

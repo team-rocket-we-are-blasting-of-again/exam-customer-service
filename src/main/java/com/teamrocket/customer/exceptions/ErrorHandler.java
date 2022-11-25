@@ -21,14 +21,14 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<ExceptionDTO> globalExceptionHandler(ResourceNotFoundException resourceNotFoundException) {
-        ExceptionDTO errorDTO = new ExceptionDTO(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.value(), resourceNotFoundException.getMessage());
-        return new ResponseEntity<ExceptionDTO>(
-                errorDTO,
-                new HttpHeaders(),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
+//    @ExceptionHandler({Exception.class})
+//    public ResponseEntity<ExceptionDTO> globalExceptionHandler(ResourceNotFoundException resourceNotFoundException) {
+//        ExceptionDTO errorDTO = new ExceptionDTO(new Date(), HttpStatus.INTERNAL_SERVER_ERROR.value(), resourceNotFoundException.getMessage());
+//        return new ResponseEntity<ExceptionDTO>(
+//                errorDTO,
+//                new HttpHeaders(),
+//                HttpStatus.INTERNAL_SERVER_ERROR
+//        );
+//    }
 
 }

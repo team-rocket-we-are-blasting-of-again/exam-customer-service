@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -26,21 +27,16 @@ import java.util.Map;
 @CrossOrigin() // open for all ports
 @RestController
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class CustomerController {
-    //public record CustomerController(CustomerService customerService) {
-// TODO: REMOVE comments when controller is done
 
-    @Autowired
+    // TODO: REMOVE comments when controller is done
+    //public record CustomerController(CustomerService customerService) {
+
+
     private CustomerService customerService;
-    @Autowired
+
     private CamundaService camundaService;
-//    private final TemplateService templateService;
-//
-//    @GetMapping
-//    public TemplateDTO getHello() {
-//        return templateService.hello("You");
-//    }
 
     /**
      * POST REQUEST
@@ -51,6 +47,12 @@ public class CustomerController {
     public ResponseEntity<Customer> customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         log.info("New customer registered {}", customerRegistrationRequest);
         return customerService.registerCustomer(customerRegistrationRequest);
+    }
+
+    @PostMapping("/customer-new-order")
+    public String createNewOrder(@RequestHeader Map<String, String> header, @RequestBody NewOrder newOrder) throws JsonProcessingException {
+        String customerId = header.get("role_id");
+        return camundaService.startOrderProcess(customerId, newOrder);
     }
 
     /**
@@ -68,18 +70,6 @@ public class CustomerController {
         log.info("Customers was fetched with id: {}", id);
         return customerService.getCustomerById(id);
     }
-
-    @PostMapping("/customer-new-order")
-    public String createNewOrder(@RequestBody NewOrder newOrder) throws JsonProcessingException {
-        return camundaService.startOrderProcess(newOrder);
-    }
-
-//    @GetMapping("/customer-new-order")
-//    public CamundaStartOrderProcess createNewOrder() {
-//        CamundaStartOrderProcess camundaStartOrderProcess = new CamundaStartOrderProcess();
-//        camundaStartOrderProcess.setVariables(new CamundaStartOrderProcess.CamundaOrder(new NewOrder(), "json"));
-//        return camundaStartOrderProcess;
-//    }
 
     /**
      * PUT REQUEST
@@ -99,4 +89,5 @@ public class CustomerController {
         log.info("Customers was deleted with id: {}", id);
         return customerService.deleteCustomer(id);
     }
+
 }
