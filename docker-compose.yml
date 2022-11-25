@@ -82,7 +82,7 @@ services:
 networks:
   customer:
     driver: bridge
-    external: true
+  #  external: true
 
 volumes:
   postgres:
