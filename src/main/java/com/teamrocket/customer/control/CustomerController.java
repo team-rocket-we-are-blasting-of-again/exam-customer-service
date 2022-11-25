@@ -1,23 +1,18 @@
 package com.teamrocket.customer.control;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.teamrocket.customer.dto.CamundaStartOrderProcess;
 import com.teamrocket.customer.dto.NewOrder;
 import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.service.CamundaService;
 import com.teamrocket.customer.service.CustomerService;
-import com.teamrocket.customer.service.TemplateService;
-import com.teamrocket.customer.dto.TemplateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

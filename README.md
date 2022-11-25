@@ -13,3 +13,4 @@
   - Kafka produce (NEW_CUSTOMER)
   - Global exception handler
   - DTO instead of entity
+  - gateway-routes.json
