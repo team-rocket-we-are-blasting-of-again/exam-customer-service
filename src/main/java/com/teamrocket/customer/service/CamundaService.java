@@ -48,6 +48,8 @@ public class CamundaService {
                                 .build())
                         .build())
                 .build();
+
+        // TODO: REMOVE WHEN DONE
         System.out.println("REQUEST: " + camundaRequest.toString());
         HttpEntity<CamundaStartOrderProcess> request =
                 new HttpEntity<>(camundaRequest, headers);

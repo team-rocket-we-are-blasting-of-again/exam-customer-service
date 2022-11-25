@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class NewOrder {
+    private int customerId;
     private int restaurantId;
     private Date createdAt;
     private boolean withDelivery;
