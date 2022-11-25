@@ -30,12 +30,16 @@ public class CamundaService {
     @Autowired
     private ObjectMapper mapper;
 
-    public String startOrderProcess(NewOrder newOrder) throws JsonProcessingException {
+    public String startOrderProcess(String customerId, NewOrder newOrder) throws JsonProcessingException {
+        int parsedId = Integer.parseInt(customerId);
+        newOrder.setCustomerId(parsedId);
+
         String startProcessURL = new StringBuilder(restEngine)
                 .append("process-definition/key/")
                 .append(processDefinitionKey)
                 .append("/start")
                 .toString();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         CamundaStartOrderProcess camundaRequest = CamundaStartOrderProcess.builder()
@@ -48,12 +52,17 @@ public class CamundaService {
                                 .build())
                         .build())
                 .build();
+
+        // TODO: REMOVE WHEN DONE
         System.out.println("REQUEST: " + camundaRequest.toString());
+
         HttpEntity<CamundaStartOrderProcess> request =
                 new HttpEntity<>(camundaRequest, headers);
         ResponseEntity<String> response =
                 restTemplate.postForEntity(startProcessURL, request, String.class);
+
         log.info("Camunda process with id {} started", response.getBody());
+
         return response.getBody();
     }
 }

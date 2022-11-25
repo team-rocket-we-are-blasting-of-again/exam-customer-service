@@ -7,10 +7,8 @@ import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.repository.CustomerRepository;
-import io.grpc.stub.annotations.GrpcGenerated;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -97,4 +95,5 @@ public class CustomerService implements ICustomerService {
         response.put("Deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+
 }
