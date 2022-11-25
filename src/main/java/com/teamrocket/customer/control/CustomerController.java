@@ -8,6 +8,7 @@ import com.teamrocket.customer.service.CamundaService;
 import com.teamrocket.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +23,16 @@ import java.util.Map;
 @CrossOrigin() // open for all ports
 @RestController
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
-@RequiredArgsConstructor
 public class CustomerController {
 
     // TODO: REMOVE comments when controller is done
     //public record CustomerController(CustomerService customerService) {
 
+    @Autowired
+    private CustomerService customerService;
 
-    private final CustomerService customerService;
-
-    private final CamundaService camundaService;
+    @Autowired
+    private CamundaService camundaService;
 
     /**
      * POST REQUEST
@@ -55,7 +56,8 @@ public class CustomerController {
      */
 
     @GetMapping("/customers")
-    public ResponseEntity<List<Customer>> getCustomers() {
+    //public ResponseEntity<List<Customer>> getCustomers() {
+    public List<Customer> getCustomers() {
         log.info("All customers were fetched {}", LocalDateTime.now());
         return customerService.getCustomers();
     }

@@ -1,6 +1,5 @@
 package com.teamrocket.customer.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,20 +23,15 @@ public class Customer {
             generator = "customer_id_sequence"
     )
     private int id;
-    @Column(name = "first_name")
-    @NotNull
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name")
-    @NotNull
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "email")
-    @NotNull
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Column(name = "address_id")
-    @NotNull
+    @Column(name = "address_id", nullable = false)
     private int addressId;
-    @Column(name = "phone_number")
-    @NotNull
+    @Column(name = "phone_number", nullable = false)
     private String phone;
     // TODO orders: List<CustomerOrder>
 

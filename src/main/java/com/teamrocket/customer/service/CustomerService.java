@@ -34,6 +34,8 @@ public class CustomerService implements ICustomerService {
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .email(request.email())
+                .addressId(request.addressId())
+                .phone(request.phone())
                 .build();
 
         // TODO: check if email is valid
@@ -41,13 +43,13 @@ public class CustomerService implements ICustomerService {
         // TODO: gRPC call
         Customer newCustomer = customerRepository.save(customer);
 
-        NewCustomer authService = NewCustomer.newBuilder()
-                .setEmail(customer.getEmail())
-                .setPassword(request.password())
-                .setRoleId(newCustomer.getId())
-                .build();
-
-        VerifiedUser unaryCallCustomer = unaryCall.createCustomer(authService);
+//        NewCustomer authService = NewCustomer.newBuilder()
+//                .setEmail(customer.getEmail())
+//                .setPassword(request.password())
+//                .setRoleId(newCustomer.getId())
+//                .build();
+//
+//        VerifiedUser unaryCallCustomer = unaryCall.createCustomer(authService);
 
         // TODO: EMIT CUSTOMER EVENT when customer has been verified
 
@@ -55,12 +57,14 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ResponseEntity<List<Customer>> getCustomers() {
-        try {
-            return new ResponseEntity<>(customerRepository.findAll(), HttpStatus.OK);
-        } catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public List<Customer> getCustomers() {
+   // public ResponseEntity<List<Customer>> getCustomers() {
+//        try {
+//            return new ResponseEntity<>(customerRepository.findAll(), HttpStatus.OK);
+//        } catch (Exception exception) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        return customerRepository.findAll();
     }
 
     @Override

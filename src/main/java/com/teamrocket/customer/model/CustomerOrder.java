@@ -1,6 +1,5 @@
 package com.teamrocket.customer.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,26 +27,19 @@ public class CustomerOrder {
     private int id;
     // TODO: items List<MenuItem, Integer>
     // private Map<MenuItem, Integer> items;
-    @Column(name = "created_time")
+    @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.DATE)
-    @NotNull
     private Date createdAt;
-    @Column(name = "deliver")
-    @NotNull
+    @Column(name = "deliver", nullable = false)
     private boolean deliver;
-    @Column(name = "delivery_price")
-    @NotNull
+    @Column(name = "delivery_price", nullable = false)
     private double deliveryPrice;
-    @Column(name = "order_price")
-    @NotNull
+    @Column(name = "order_price", nullable = false)
     private double orderPrice;
-    @Column(name = "restaurant_name")
-    @NotNull
+    @Column(name = "restaurant_name", nullable = false)
     private String restaurantName;
-    @Column(name = "restaurant_address")
-    @NotNull
+    @Column(name = "restaurant_address", nullable = false)
     private String restaurantAddress;
-    @Column(name = "phone_number")
-    @NotNull
+    @Column(name = "phone_number", nullable = false)
     private String phone;
 }
