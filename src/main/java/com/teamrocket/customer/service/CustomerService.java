@@ -9,7 +9,6 @@ import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,13 +42,14 @@ public class CustomerService implements ICustomerService {
         // TODO: gRPC call
         Customer newCustomer = customerRepository.save(customer);
 
-//        NewCustomer authService = NewCustomer.newBuilder()
-//                .setEmail(customer.getEmail())
-//                .setPassword(request.password())
-//                .setRoleId(newCustomer.getId())
-//                .build();
-//
-//        VerifiedUser unaryCallCustomer = unaryCall.createCustomer(authService);
+        NewCustomer authService = NewCustomer.newBuilder()
+                .setEmail(customer.getEmail())
+                .setPassword(request.password())
+                .setRoleId(newCustomer.getId())
+                .build();
+
+        // TODO: return this when auth service has made its rpc
+        VerifiedUser unaryCallCustomer = unaryCall.createCustomer(authService);
 
         // TODO: EMIT CUSTOMER EVENT when customer has been verified
 
@@ -58,12 +58,6 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<Customer> getCustomers() {
-   // public ResponseEntity<List<Customer>> getCustomers() {
-//        try {
-//            return new ResponseEntity<>(customerRepository.findAll(), HttpStatus.OK);
-//        } catch (Exception exception) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
         return customerRepository.findAll();
     }
 

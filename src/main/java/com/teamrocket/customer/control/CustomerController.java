@@ -8,7 +8,7 @@ import com.teamrocket.customer.service.CamundaService;
 import com.teamrocket.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Slf4j
 //@CrossOrigin(origins = "http://localhost:8012") //open for specific port
 @CrossOrigin() // open for all ports
@@ -25,14 +26,10 @@ import java.util.Map;
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
 
-    // TODO: REMOVE comments when controller is done
-    //public record CustomerController(CustomerService customerService) {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    @Autowired
-    private CamundaService camundaService;
+    private final CamundaService camundaService;
 
     /**
      * POST REQUEST
@@ -56,10 +53,13 @@ public class CustomerController {
      */
 
     @GetMapping("/customers")
-    //public ResponseEntity<List<Customer>> getCustomers() {
-    public List<Customer> getCustomers() {
+    public ResponseEntity<List<Customer>> getCustomers() {
         log.info("All customers were fetched {}", LocalDateTime.now());
-        return customerService.getCustomers();
+        try {
+            return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/customer/{id}")
