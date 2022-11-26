@@ -9,6 +9,7 @@
   - Cloud contract  
   - gRPC  
   - Transactional  
+  - where does address id come from? 
   - Kafka Consumer (kafka listener på orders)
   - Kafka produce (NEW_CUSTOMER)
   - Global exception handler

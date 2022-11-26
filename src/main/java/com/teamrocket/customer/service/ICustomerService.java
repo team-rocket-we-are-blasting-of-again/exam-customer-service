@@ -11,7 +11,8 @@ import java.util.Map;
 public interface ICustomerService {
     ResponseEntity<Customer> registerCustomer(CustomerRegistrationRequest request);
 
-    ResponseEntity<List<Customer>> getCustomers();
+    //ResponseEntity<List<Customer>> getCustomers();
+    List<Customer> getCustomers();
 
     ResponseEntity<Customer> getCustomerById(int id) throws ResourceNotFoundException;
 
