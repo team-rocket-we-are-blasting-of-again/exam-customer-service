@@ -25,11 +25,14 @@ import java.util.Map;
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    @Autowired
-    private CamundaService camundaService;
+    private final CamundaService camundaService;
+
+    public CustomerController(CustomerService customerService, CamundaService camundaService) {
+        this.customerService = customerService;
+        this.camundaService = camundaService;
+    }
 
     /**
      * POST REQUEST

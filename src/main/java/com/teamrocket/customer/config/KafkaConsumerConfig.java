@@ -1,6 +1,7 @@
 package com.teamrocket.customer.config;
 
 import com.teamrocket.customer.dto.TemplateDTO;
+import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

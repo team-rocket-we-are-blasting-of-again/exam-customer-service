@@ -10,8 +10,9 @@
   - gRPC  
   - Transactional  
   - where does address id come from? 
-  - Kafka Consumer (kafka listener på orders)
+  - relationships
+  - Kafka Consumer (kafka listener on orders)
   - Kafka produce (NEW_CUSTOMER)
-  - Global exception handler
   - DTO instead of entity
   - gateway-routes.json
+  - add monitoring of service

@@ -1,4 +1,4 @@
-package com.teamrocket.customer.config;
+package com.teamrocket.customer.util;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
