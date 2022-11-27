@@ -6,6 +6,7 @@ import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.service.CamundaService;
 import com.teamrocket.customer.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,14 +24,18 @@ import java.util.Map;
 @CrossOrigin() // open for all ports
 @RestController
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequiredArgsConstructor
 public class CustomerController {
 
-    private final CustomerService customerService;
+    private CustomerService customerService;
 
-    private final CamundaService camundaService;
+    private CamundaService camundaService;
 
-    public CustomerController(CustomerService customerService, CamundaService camundaService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
+    }
+
+    public CustomerController(CamundaService camundaService) {
         this.camundaService = camundaService;
     }
 
