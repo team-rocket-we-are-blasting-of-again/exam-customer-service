@@ -27,7 +27,6 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(
                 Error.builder()
-                        //   .errorMessage(resourceNotFoundException.getLocalizedMessage())
                         .errorCode(HttpStatus.BAD_REQUEST.toString())
                         .request(request.getRequestURI())
                         .requestType(request.getMethod())
@@ -48,7 +47,6 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(
                 Error.builder()
-                        // .errorMessage(exception.getLocalizedMessage())
                         .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.toString())
                         .request(request.getRequestURI())
                         .requestType(request.getMethod())

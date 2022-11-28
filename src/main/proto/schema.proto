@@ -7,7 +7,7 @@ option java_multiple_files = true;
 import "google/protobuf/wrappers.proto";
 
 service AuthService {
-  rpc createCustomer(NewCustomer) returns (VerifiedUser);
+  rpc verifyCustomer(NewCustomer) returns (VerifiedUser);
 }
 
 message NewCustomer {

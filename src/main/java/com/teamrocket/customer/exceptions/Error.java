@@ -9,7 +9,6 @@ import java.util.Date;
 @Data
 public class Error {
 
-    //private String errorMessage;
     private String errorCode;
     private String request;
     private String requestType;

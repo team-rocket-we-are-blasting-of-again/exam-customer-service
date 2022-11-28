@@ -3,6 +3,8 @@ package com.teamrocket.customer.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,8 +33,15 @@ public class Customer {
     private String email;
     @Column(name = "address_id", nullable = false)
     private int addressId;
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phone;
-    // TODO orders: List<CustomerOrder>
+
+    @ManyToOne
+    @JoinColumn(name = "customer_address_id")
+    private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_order_id")
+    private CustomerOrder customerOrder;
 
 }

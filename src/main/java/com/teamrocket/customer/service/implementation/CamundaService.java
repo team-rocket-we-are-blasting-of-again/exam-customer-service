@@ -1,9 +1,11 @@
-package com.teamrocket.customer.service;
+package com.teamrocket.customer.service.implementation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamrocket.customer.dto.CamundaStartOrderProcess;
 import com.teamrocket.customer.dto.NewOrder;
+import com.teamrocket.customer.service.ICamundaService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
-public class CamundaService {
+public class CamundaService implements ICamundaService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -52,9 +55,6 @@ public class CamundaService {
                                 .build())
                         .build())
                 .build();
-
-        // TODO: REMOVE WHEN DONE
-        System.out.println("REQUEST: " + camundaRequest.toString());
 
         HttpEntity<CamundaStartOrderProcess> request =
                 new HttpEntity<>(camundaRequest, headers);

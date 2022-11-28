@@ -16,3 +16,5 @@
   - DTO instead of entity
   - gateway-routes.json
   - add monitoring of service
+  - move classes to the right layer
+  - HATEOAS

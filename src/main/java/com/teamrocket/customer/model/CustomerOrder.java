@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
-
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +25,12 @@ public class CustomerOrder {
             generator = "customer_id_sequence"
     )
     private int id;
-    // TODO: items List<MenuItem, Integer>
-    // private Map<MenuItem, Integer> items;
+
+
+    @ManyToOne
+    @JoinColumn(name = "customer_menu_item_id")
+    private MenuItem menuItem;
+
     @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -42,4 +46,8 @@ public class CustomerOrder {
     private String restaurantAddress;
     @Column(name = "phone_number", nullable = false)
     private String phone;
+
+    @OneToMany(mappedBy = "customerOrder")
+    private List<Customer> customerOrderList;
+
 }

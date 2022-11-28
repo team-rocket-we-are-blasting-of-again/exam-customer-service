@@ -1,5 +1,7 @@
 package com.teamrocket.customer.config;
 
+import com.teamrocket.customer.dto.NewCustomerEventDTO;
+import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,35 +19,16 @@ public class KafkaProducerConfig {
 
     private final KafkaUtil kafkaUtil;
 
-//    public Map<String, Object> producerConfig() {
-//        Map<String, Object> properties = new HashMap<>();
-//        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-//        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-//        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-//        return properties;
-//    }
-
-    // TODO: PASS A CUSTOMER OR ORDER AS VALUE INSTEAD OF STRING
+    // TODO: PASS A CUSTOMER OR ORDER DTO AS VALUE
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, NewCustomerEventDTO> producerFactory() {
         return this.kafkaUtil.createClassProducerFactory();
     }
 
-//    @Bean
-//    public ProducerFactory<String, String> producerFactory() {
-//        return new DefaultKafkaProducerFactory<>(producerConfig());
-//    }
-
-    // TODO: PASS A CUSTOMER OR ORDER AS VALUE INSTEAD OF STRING
+    // TODO: PASS A CUSTOMER OR ORDER DTO AS VALUE
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, NewCustomerEventDTO> kafkaTemplate() {
         return new KafkaTemplate<>(this.producerFactory());
     }
-//    @Bean
-//    public KafkaTemplate<String, String> kafkaTemplate(
-//            ProducerFactory<String, String> producerFactory
-//    ) {
-//        return new KafkaTemplate<>(producerFactory);
-//    }
 
 }

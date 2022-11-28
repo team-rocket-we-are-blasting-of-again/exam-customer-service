@@ -13,6 +13,7 @@ public class TemplateDTO {
     private int id;
     private String msg;
 
+    // TODO: DELETE CLASS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

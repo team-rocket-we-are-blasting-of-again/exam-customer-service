@@ -3,6 +3,7 @@ package com.teamrocket.customer.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,5 +36,9 @@ public class Address {
     private String countryCode;
     @Column(name = "door")
     private String door;
+
+    @OneToMany(mappedBy = "address")
+    private List<Customer> customerList;
+
 
 }

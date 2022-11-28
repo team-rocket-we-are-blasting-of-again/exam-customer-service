@@ -1,9 +1,9 @@
 package com.teamrocket.customer.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,11 +24,14 @@ public class MenuItem {
             generator = "customer_id_sequence"
     )
     private int id;
-    @Column(name = "name")
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description")
-    @NotNull
+    @Column(name = "description", nullable = false)
     private String description;
+
+
+    @OneToMany(mappedBy = "menuItem")
+    private List<CustomerOrder> items;
+
 
 }
