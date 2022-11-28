@@ -6,7 +6,6 @@ import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.service.implementation.CamundaService;
 import com.teamrocket.customer.service.implementation.CustomerService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,15 +25,10 @@ import java.util.Map;
 @RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
 
-    private final CustomerService customerService;
-    private final CamundaService camundaService;
-
-    public CustomerController(CamundaService camundaService, CustomerService customerService) {
-        this.camundaService = camundaService;
-        this.customerService = customerService;
-    }
-
-
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private CamundaService camundaService;
 
 
     /**
@@ -77,7 +71,7 @@ public class CustomerController {
      */
     @PutMapping("/customer/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") int id, @RequestBody Customer customer) {
-        System.out.println("PATH VARIABLE FOR PUT: "+ id);
+        System.out.println("PATH VARIABLE FOR PUT: " + id);
         log.info("Customers was updated with id: {}", id);
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
