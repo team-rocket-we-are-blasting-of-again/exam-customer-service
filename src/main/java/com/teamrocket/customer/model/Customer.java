@@ -34,7 +34,6 @@ public class Customer {
     private int addressId;
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phone;
-    @Column(name = "customer_order")
     @OneToMany(mappedBy = "customer")
     private List<CustomerOrder> customerOrder;
 

@@ -4,8 +4,6 @@ package com.teamrocket;
 
 option java_multiple_files = true;
 
-import "google/protobuf/wrappers.proto";
-
 service Verify {
   rpc VerifyUser (VerifyUserRequest) returns (VerifyUserResponse);
 }

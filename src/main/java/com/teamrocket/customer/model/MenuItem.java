@@ -28,8 +28,6 @@ public class MenuItem {
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
-
-
     @ManyToMany(mappedBy = "menuItem")
     private List<CustomerOrder> items;
 

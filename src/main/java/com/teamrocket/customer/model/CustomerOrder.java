@@ -25,9 +25,11 @@ public class CustomerOrder {
             generator = "customer_id_sequence"
     )
     private int id;
-
-
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_order_menu_item",
+            joinColumns = @JoinColumn(name = "menu_item_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_order_id",
+                    referencedColumnName = "id"))
     private List<MenuItem> menuItem;
     @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -44,8 +46,8 @@ public class CustomerOrder {
     private String restaurantAddress;
     @Column(name = "phone_number", nullable = false)
     private String phone;
-    @Column(name = "customer", nullable = false)
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
 }
