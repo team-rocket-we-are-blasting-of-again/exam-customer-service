@@ -1,9 +1,11 @@
 package com.teamrocket.customer.service.implementation;
 
-import com.teamrocket.AuthServiceGrpc;
-import com.teamrocket.NewCustomer;
-import com.teamrocket.VerifiedUser;
-import com.teamrocket.customer.exceptions.ResourceNotFoundException;
+
+import com.teamrocket.CreateUserRequest;
+import com.teamrocket.CreateUserResponse;
+import com.teamrocket.Role;
+import com.teamrocket.UserGrpc;
+import com.teamrocket.customer.exceptions.RegistrationFailException;
 import com.teamrocket.customer.model.Customer;
 import com.teamrocket.customer.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.repository.CustomerRepository;
@@ -16,21 +18,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class RPCService implements IRPCService {
     @GrpcClient("grpc-service")
-    private AuthServiceGrpc.AuthServiceBlockingStub unaryCall;
+    private UserGrpc.UserBlockingStub unaryCall;
 
     private final CustomerRepository customerRepository;
 
-    public VerifiedUser verifyCustomer(Customer customer, CustomerRegistrationRequest request) {
+    @Override
+    public CreateUserResponse createCustomer(Customer customer, CustomerRegistrationRequest request) {
+
         Customer newCustomer = customerRepository.findByEmail(customer.getEmail());
 
-        NewCustomer authService = NewCustomer.newBuilder()
+        CreateUserRequest authService = CreateUserRequest.newBuilder()
+                .setRole(Role.CUSTOMER)
+                .setRoleId(newCustomer.getId())
                 .setEmail(customer.getEmail())
                 .setPassword(request.password())
-                .setRoleId(newCustomer.getId())
                 .build();
 
-        // TODO: Need verification from Auth service
-        return unaryCall.verifyCustomer(authService);
+        CreateUserResponse createUserRequest = unaryCall.createUser(authService);
+        if (createUserRequest == null) {
+            // gRPC StatusRuntimeException
+            throw new RegistrationFailException("Registration failed on user: " + customer.getEmail());
+        }
+
+        return createUserRequest;
     }
 
 }

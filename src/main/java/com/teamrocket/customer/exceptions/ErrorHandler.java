@@ -20,7 +20,7 @@ public class ErrorHandler {
             ResourceNotFoundException resourceNotFoundException,
             HttpServletRequest request) {
 
-        log.error("validation exception : " +
+        log.error("resource not found exception : " +
                 resourceNotFoundException.getLocalizedMessage() +
                 " for " +
                 request.getRequestURI());
@@ -35,12 +35,32 @@ public class ErrorHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({RegistrationFailException.class})
+    public ResponseEntity<Error> registrationFailException(
+            RegistrationFailException resourceNotFoundException,
+            HttpServletRequest request) {
+
+        log.error("registration failed exception : " +
+                resourceNotFoundException.getLocalizedMessage() +
+                " for " +
+                request.getRequestURI());
+
+        return new ResponseEntity<>(
+                Error.builder()
+                        .errorCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString())
+                        .request(request.getRequestURI())
+                        .requestType(request.getMethod())
+                        .customMessage("Could not perform registration")
+                        .timestamp(new Date())
+                        .build(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
+    }
+
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Error> genericException(
             Exception exception,
             HttpServletRequest request) {
 
-        log.error("exception : " +
+        log.error("global exception : " +
                 exception.getLocalizedMessage() +
                 " for " +
                 request.getRequestURI());

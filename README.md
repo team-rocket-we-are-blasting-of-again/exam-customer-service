@@ -7,14 +7,16 @@
   - logging
   - flyway or H2
   - Cloud contract  
-  - gRPC  
-  - Transactional  
-  - where does address id come from? 
-  - relationships
+  - move classes to the right packages
+  - where does address id come from? - location service
   - Kafka Consumer (kafka listener on orders)
   - Kafka produce (NEW_CUSTOMER)
   - DTO instead of entity
   - gateway-routes.json
   - add monitoring of service
-  - move classes to the right layer
-  - HATEOAS
+  - relationships - 
+  - Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+  - gRPC new implementation - done
+  - Transactional - done on method
+  - registration error handler (unable to register) StatusRuntimeException exception - done
+  - if time add status so a customer can see it

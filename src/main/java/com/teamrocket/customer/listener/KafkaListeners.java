@@ -10,7 +10,7 @@ public class KafkaListeners {
     @KafkaListener(
             topics = "NEW_CUSTOMER",
             groupId = "customerId", // unique id when scaling
-            containerFactory = "messageFactory" // to be able to consume objects
+            containerFactory = "messageFactory" // to be able to consume objects @bean
     )
     void listener(NewCustomerEventDTO data) {
         System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s%n%s%n%s%n: ", data.firstName(), data.lastName(), data.email(), data.addressId(), data.phone());
@@ -22,6 +22,8 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void newOrderPlaceListener(NewCustomerEventDTO data) {
+        // FIND customer from customerid from order
+        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
         System.out.println("Topic: NEW_ORDER_PLACED listener received: " + data);
     }
 

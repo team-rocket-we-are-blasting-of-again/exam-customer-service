@@ -1,6 +1,5 @@
 package com.teamrocket.customer.service.implementation;
 
-import com.teamrocket.VerifiedUser;
 import com.teamrocket.customer.dto.NewCustomerEventDTO;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.model.Customer;
@@ -10,6 +9,7 @@ import com.teamrocket.customer.service.ICustomerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,9 @@ public class CustomerService implements ICustomerService {
     @Override
     @Transactional
     public Customer registerCustomer(CustomerRegistrationRequest request) {
-        System.out.println("REQUEST: " + request);
+        // TODO: Call location service before making a customer
+        // Send address to location service and location will give me an address id
+        // gRPC call to location service to get the address id
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
@@ -50,16 +52,22 @@ public class CustomerService implements ICustomerService {
                 newCustomer.getAddressId(),
                 newCustomer.getPhone()
         );
-//        VerifiedUser verifiedUser = rpcService.verifyCustomer(customer, request);
-//        if (verifiedUser.getVerified())
-            kafkaService.publishEvent(newCustomerEventDTO);
+
+        rpcService.createCustomer(customer, request);
+
+        kafkaService.publishEvent(newCustomerEventDTO);
 
         return newCustomer;
     }
 
     @Override
     public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+        // TODO: outcomment below and remove other code below that
+//        return new ArrayList<>(customerRepository.findAll());
+        List<Customer> customerList = new ArrayList<>();
+        customerRepository.findAll()
+                .forEach(customerList::add);
+        return customerList;
     }
 
     @Override

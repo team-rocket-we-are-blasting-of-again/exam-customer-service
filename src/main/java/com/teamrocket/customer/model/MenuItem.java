@@ -30,7 +30,7 @@ public class MenuItem {
     private String description;
 
 
-    @OneToMany(mappedBy = "menuItem")
+    @ManyToMany(mappedBy = "menuItem")
     private List<CustomerOrder> items;
 
 

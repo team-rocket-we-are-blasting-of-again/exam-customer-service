@@ -27,10 +27,8 @@ public class CustomerOrder {
     private int id;
 
 
-    @ManyToOne
-    @JoinColumn(name = "customer_menu_item_id")
-    private MenuItem menuItem;
-
+    @ManyToMany
+    private List<MenuItem> menuItem;
     @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -46,8 +44,8 @@ public class CustomerOrder {
     private String restaurantAddress;
     @Column(name = "phone_number", nullable = false)
     private String phone;
-
-    @OneToMany(mappedBy = "customerOrder")
-    private List<Customer> customerOrderList;
+    @Column(name = "customer", nullable = false)
+    @ManyToOne
+    private Customer customer;
 
 }

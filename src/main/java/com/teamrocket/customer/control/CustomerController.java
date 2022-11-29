@@ -71,7 +71,6 @@ public class CustomerController {
      */
     @PutMapping("/customer/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") int id, @RequestBody Customer customer) {
-        System.out.println("PATH VARIABLE FOR PUT: " + id);
         log.info("Customers was updated with id: {}", id);
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
