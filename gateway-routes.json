@@ -1,0 +1,27 @@
+[
+  {
+    "requestPath": "/api/v1/**",
+    "forwardUri": "http://customer:8012",
+    "routePathDto": [
+      {
+        "path": "/api/v1/customer/actuator/**",
+        "method": "BASIC",
+        "rolesAllowed": []
+      },
+      {
+        "path": "/api/v1/customer/**",
+        "method": "BEARER",
+        "rolesAllowed": [
+          "CUSTOMER"
+        ]
+      },
+      {
+        "path": "/api/v1/customers/**",
+        "method": "BEARER",
+        "rolesAllowed": [
+          "CUSTOMER"
+        ]
+      }
+    ]
+  }
+]

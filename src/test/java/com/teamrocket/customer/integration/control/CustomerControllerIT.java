@@ -2,7 +2,7 @@ package com.teamrocket.customer.integration.control;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamrocket.customer.dto.TemplateDTO;
+import com.teamrocket.customer.model.dto.TemplateDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

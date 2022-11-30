@@ -1,5 +1,6 @@
 package com.teamrocket.customer.exceptions;
 
+import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +36,13 @@ public class ErrorHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({RegistrationFailException.class})
+    @ExceptionHandler({StatusRuntimeException.class})
     public ResponseEntity<Error> registrationFailException(
-            RegistrationFailException resourceNotFoundException,
+            StatusRuntimeException statusRuntimeException,
             HttpServletRequest request) {
 
-        log.error("registration failed exception : " +
-                resourceNotFoundException.getLocalizedMessage() +
+        log.error("authentication failed exception : " +
+                statusRuntimeException.getLocalizedMessage() +
                 " for " +
                 request.getRequestURI());
 
@@ -50,7 +51,7 @@ public class ErrorHandler {
                         .errorCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString())
                         .request(request.getRequestURI())
                         .requestType(request.getMethod())
-                        .customMessage("Could not perform registration")
+                        .customMessage("Could not perform authentication")
                         .timestamp(new Date())
                         .build(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
     }

@@ -7,7 +7,6 @@ import org.apache.kafka.clients.admin.NewTopic;
 
 @Configuration
 public class KafkaTopicConfig {
-
     @Bean
     public NewTopic customerTopic() {
         return TopicBuilder.name("NEW_CUSTOMER")

@@ -1,7 +1,6 @@
 package com.teamrocket.customer.config;
 
-import com.teamrocket.customer.dto.NewCustomerEventDTO;
-import com.teamrocket.customer.model.Customer;
+import com.teamrocket.customer.model.dto.NewCustomer;
 import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,15 +16,14 @@ public class KafkaConsumerConfig {
 
     private final KafkaUtil kafkaUtil;
 
-    // TODO: IMPLEMENT REAL CUSTOMERDTO - objekt fra kafka
     @Bean
-    public ConsumerFactory<String, NewCustomerEventDTO> messageConsumerFactory() {
-        return this.kafkaUtil.createClassConsumerFactory(NewCustomerEventDTO.class);
+    public ConsumerFactory<String, NewCustomer> messageConsumerFactory() {
+        return this.kafkaUtil.createClassConsumerFactory(NewCustomer.class);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, NewCustomerEventDTO>> messageFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, NewCustomerEventDTO> factory =
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, NewCustomer>> messageFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, NewCustomer> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(this.messageConsumerFactory());
         return factory;

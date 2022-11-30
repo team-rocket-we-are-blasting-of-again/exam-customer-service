@@ -1,6 +1,6 @@
 package com.teamrocket.customer.unit.service;
 
-import com.teamrocket.customer.service.TemplateService;
+import com.teamrocket.customer.domain.service.TemplateService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
