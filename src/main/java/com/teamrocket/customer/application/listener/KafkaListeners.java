@@ -1,18 +1,29 @@
 package com.teamrocket.customer.application.listener;
 
 import com.teamrocket.customer.domain.model.dto.*;
+import com.teamrocket.customer.domain.model.entity.CustomerEntity;
+import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
+import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import com.teamrocket.customer.domain.model.enums.Topic;
+import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
+import com.teamrocket.customer.domain.service.implementation.CustomerService;
 import com.teamrocket.customer.domain.service.implementation.KafkaService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
+import java.util.Date;
+
 @Component
 public class KafkaListeners {
-
+    private final CustomerService customerService;
     private final KafkaService kafkaService;
+    private final CustomerOrderService customerOrderService;
 
-    public KafkaListeners(KafkaService kafkaService) {
+    public KafkaListeners(CustomerService customerService, KafkaService kafkaService, CustomerOrderService customerOrderService) {
+        this.customerService = customerService;
         this.kafkaService = kafkaService;
+        this.customerOrderService = customerOrderService;
     }
 
     // TODO: For testing, remove when moving to production
@@ -36,15 +47,20 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void newOrderPlaceListener(NewCustomerOrder data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
-
+        // find customer by id
+        CustomerEntity customer = customerService.getCustomerById(data.getCustomerId());
+        // create and save customer order
+        CustomerOrderEntity customerOrder = customerOrderService.createCustomerOrder(customer, data);
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.PENDING, data.getId()); // TODO SKAL JEG BRUGE DENNE ENTITY TIL AT BYGGE NOTIFICATION?
+        // build notification
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
-                .subject("MTOGO: Order has been placed")
-                .message("Dear " + "data.getName() " + ",%n" + "Thank you for your order. We will begin the process og validating your order.")
+                .email(customerOrder.getCustomer().getEmail())
+                .subject("MTOGO: New order has been placed")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "Thank you for your order. We will begin the process of validating your order and will keep you updated throughout the whole process.")
                 .build();
-
+        // emit customer notification event
         kafkaService.customerNotificationEvent(Topic.NEW_ORDER_PLACED, customerNotification);
     }
 
@@ -53,13 +69,16 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderAcceptedListener(SystemOrder data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.IN_PROGRESS, systemOrderId);
 
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
+                .email(customerOrder.getCustomer().getEmail())
                 .subject("MTOGO: Order has been accepted")
-                .message("Dear " + "data.getName() " + ",%n" + "Your order has been accepted and we will inform you when the order is ready.")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "Your order has been accepted and creation started at " + customerOrder.getCreatedAt() +
+                        " and we will inform you when the order is ready.%n")
                 .build();
 
         kafkaService.customerNotificationEvent(Topic.ORDER_ACCEPTED, customerNotification);
@@ -70,13 +89,15 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderReadyListener(SystemOrder data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.READY, systemOrderId);
 
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
-                .subject("MTOGO: Order is ready for pickup")
-                .message("Dear " + "data.getName() " + ",%n" + "The restaurant has finished your order and is ready for pick up.")
+                .email(customerOrder.getCustomer().getEmail())
+                .subject("MTOGO: Order is ready for pickup.")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "The restaurant has now finished your order and is ready to be enjoyed.")
                 .build();
 
         kafkaService.customerNotificationEvent(Topic.ORDER_READY, customerNotification);
@@ -87,12 +108,17 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderCanceledListener(OrderCancelled data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.CANCELLED, systemOrderId);
+
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
-                .subject("MTOGO: Order has been cancelled")
-                .message("Dear " + "data.getName() " + ",%n" + "Your order has been cancelled. The reason for this is: " + data.getReason() + "%nPlease try again or contact our customer support for further information or questions you might have.")
+                .email(customerOrder.getCustomer().getEmail())
+                .subject("MTOGO: Order has been cancelled.")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "Your order has been cancelled. The reason for this is: " + data.getReason()
+                        + "%nIf you did not cancel your order please try again or feel free to contact our customer support for further " +
+                        "information or questions you might have.")
                 .build();
 
         kafkaService.customerNotificationEvent(Topic.ORDER_CANCELED, customerNotification);
@@ -103,14 +129,15 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderPickedUpListener(SystemOrder data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.PICKED_UP, systemOrderId);
+
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
+                .email(customerOrder.getCustomer().getEmail())
                 .subject("MTOGO: Order has been picked up.")
-//                .message("Dear " + data.getCustomerName() + ",%n" + "Your order has been picked up at " + data.getPickUpTime()
-//                        + " by " + data.getCourier()
-//                        + "%nThe order will arrive approximately: " + data.getDropOffTime())
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "You order has been picked up by our courier and will be with your shortly.")
                 .build();
 
         kafkaService.customerNotificationEvent(Topic.ORDER_PICKED_UP, customerNotification);
@@ -121,13 +148,20 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderDeliveredListener(SystemOrder data) {
-        // FIND customer from customerid from order
-        // TODO:Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.COMPLETED, systemOrderId);
+
         CustomerNotification customerNotification = CustomerNotification.builder()
-                .email("EMAIL IS MISSING")
-                .subject("MTOGO: Order has been delivered")
-//                .message("Dear " + data.getCustomerName() + ",%n" + "Your order has been delivered by " + data.getCourier().getFirstName()
-//                        + " " + data.getCourier().getLastName() + ".%nThank you for your order and we hope the service was as expected.")
+                .email(customerOrder.getCustomer().getEmail())
+                .subject("MTOGO: Order has been delivered.")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "Your order has been delivered by our courier." + ".%nThank you for your order and we hope our service was as expected."
+                        + "%nYour receipt will look as the following: "
+                        + "Delivery cost: " + customerOrder.getDeliveryPrice() + "%nTotal order price: " + customerOrder.getOrderPrice()
+                        + "Kind regards"
+                        + "%n%n"
+                        + "MTOGO A/S")
                 .build();
 
         kafkaService.customerNotificationEvent(Topic.ORDER_DELIVERED, customerNotification);
@@ -138,8 +172,18 @@ public class KafkaListeners {
             groupId = "customerId" // unique id when scaling
     )
     void orderClaimedListener(SystemOrder data) {
-        // SHOULD A CUSTOMER REALLY BE NOTIFIED HERE?
-        System.out.println("Topic: ORDER_CLAIMED listener received: " + data);
+        int systemOrderId = data.getSystemOrderId();
+
+        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.CLAIMED, systemOrderId);
+
+        CustomerNotification customerNotification = CustomerNotification.builder()
+                .email(customerOrder.getCustomer().getEmail())
+                .subject("MTOGO: Order has been claimed.")
+                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
+                        + ",%n" + "You order has been claimed.")
+                .build();
+
+        kafkaService.customerNotificationEvent(Topic.ORDER_CLAIMED, customerNotification);
     }
 
 }

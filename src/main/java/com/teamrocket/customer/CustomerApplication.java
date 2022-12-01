@@ -1,6 +1,7 @@
 package com.teamrocket.customer;
 
 import com.teamrocket.customer.domain.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.dto.NewCustomerOrder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,15 @@ public class CustomerApplication {
         return args -> {
             for (int i = 0; i < 2; i++) {
                 kafkaTemplate.send("NEW_CUSTOMER", new NewCustomer("JP", "LM", "email@email.com", 12 + i, "12345678"));
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner commandLineRunner(KafkaTemplate<String, NewCustomerOrder> kafkaTemplateOrderEventTest) {
+        return args -> {
+            for (int i = 0; i < 2; i++) {
+                kafkaTemplateOrderEventTest.send("NEW_CUSTOMER", new NewCustomerOrder("JP", "LM", "email@email.com", 12 + i, "12345678"));
             }
         };
     }

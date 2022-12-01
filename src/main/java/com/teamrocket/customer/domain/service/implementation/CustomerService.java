@@ -45,7 +45,7 @@ public class CustomerService implements ICustomerService {
         CustomerEntity newCustomer = customerRepository.save(customer);
 
         // TODO: OUTCOMMENT whent going into production to call Auth service
-        //rpcService.createCustomer(customer, request);
+        rpcService.createCustomer(customer, request);
 
         NewCustomer newCustomerEvent = new NewCustomer(
                 newCustomer.getFirstName(),
@@ -62,7 +62,6 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<CustomerEntity> getCustomers() {
-        // TODO: outcomment below and remove other code below that
         return new ArrayList<>(customerRepository.findAll());
     }
 

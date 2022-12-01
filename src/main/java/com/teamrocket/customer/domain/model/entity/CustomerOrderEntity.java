@@ -1,5 +1,7 @@
 package com.teamrocket.customer.domain.model.entity;
 
+import com.teamrocket.customer.domain.model.dto.OrderItem;
+import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,7 +31,8 @@ public class CustomerOrderEntity {
             joinColumns = @JoinColumn(name = "menu_item_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "customer_order_id",
                     referencedColumnName = "id"))
-    private List<MenuItemEntity> menuItemEntity;
+//    private List<MenuItemEntity> menuItemEntity; // TODO: REMOVE WHEN ALL IS WORKING
+    private List<OrderItemEntity> menuItemEntity; // TODO: MAKE THIS TO MENUITEMID INSTEAD
     @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date createdAt;
@@ -39,10 +42,14 @@ public class CustomerOrderEntity {
     private double deliveryPrice;
     @Column(name = "order_price", nullable = false)
     private double orderPrice;
-    @Column(name = "restaurant_name", nullable = false)
-    private String restaurantName;
-    @Column(name = "restaurant_address", nullable = false)
-    private String restaurantAddress;
+    @Column(name = "restaurant_id", nullable = false)
+    private int restaurantId;
+    // TODO: SAVE RESTAURANT ID AND NOT NAME AND ADDRESS
+    // TODO: REMOVE WHEN GROUP HAS APPROVED
+//    @Column(name = "restaurant_name", nullable = false)
+//    private String restaurantName;
+//    @Column(name = "restaurant_address", nullable = false)
+    //   private String restaurantAddress;
     @Column(name = "phone_number", nullable = false)
     private String phone;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -51,5 +58,5 @@ public class CustomerOrderEntity {
     @Column(name = "system_order_id")
     private int systemOrderId;
     @Column(name = "status")
-    private String status;
+    private OrderStatus status; // TODO: might have to change this to string
 }
