@@ -1,7 +1,7 @@
 package com.teamrocket.customer.config;
 
-import com.teamrocket.customer.model.dto.CustomerNotification;
-import com.teamrocket.customer.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.dto.CustomerNotification;
+import com.teamrocket.customer.domain.model.dto.NewCustomer;
 import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,9 +1,9 @@
 package com.teamrocket.customer.domain.service.implementation;
 
 import com.teamrocket.customer.domain.service.IKafkaService;
-import com.teamrocket.customer.model.dto.CustomerNotification;
-import com.teamrocket.customer.model.dto.NewCustomer;
-import com.teamrocket.customer.model.enums.Topic;
+import com.teamrocket.customer.domain.model.dto.CustomerNotification;
+import com.teamrocket.customer.domain.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.enums.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

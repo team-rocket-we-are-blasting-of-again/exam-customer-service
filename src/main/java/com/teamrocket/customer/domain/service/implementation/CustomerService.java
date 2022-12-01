@@ -1,11 +1,11 @@
 package com.teamrocket.customer.domain.service.implementation;
 
 import com.teamrocket.customer.domain.service.ICustomerService;
-import com.teamrocket.customer.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.dto.NewCustomer;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
-import com.teamrocket.customer.model.CustomerRegistrationRequest;
+import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.infrastructure.repository.CustomerRepository;
-import com.teamrocket.customer.model.entity.CustomerEntity;
+import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,11 +63,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public List<CustomerEntity> getCustomers() {
         // TODO: outcomment below and remove other code below that
-//        return new ArrayList<>(customerRepository.findAll());
-        List<CustomerEntity> customerList = new ArrayList<>();
-        customerRepository.findAll()
-                .forEach(customerList::add);
-        return customerList;
+        return new ArrayList<>(customerRepository.findAll());
     }
 
     @Override

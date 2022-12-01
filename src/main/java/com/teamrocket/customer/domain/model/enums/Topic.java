@@ -1,4 +1,4 @@
-package com.teamrocket.customer.model.enums;
+package com.teamrocket.customer.domain.model.enums;
 
 public enum Topic {
     CUSTOMER_NOTIFICATION,

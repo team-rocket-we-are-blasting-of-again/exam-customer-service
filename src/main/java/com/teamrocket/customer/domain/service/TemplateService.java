@@ -1,6 +1,6 @@
 package com.teamrocket.customer.domain.service;
 
-import com.teamrocket.customer.model.dto.TemplateDTO;
+import com.teamrocket.customer.domain.model.dto.TemplateDTO;
 import org.springframework.stereotype.Service;
 
 @Service

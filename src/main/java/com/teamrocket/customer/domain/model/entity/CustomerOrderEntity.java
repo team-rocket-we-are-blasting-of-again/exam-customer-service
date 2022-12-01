@@ -1,4 +1,4 @@
-package com.teamrocket.customer.model.entity;
+package com.teamrocket.customer.domain.model.entity;
 
 import lombok.*;
 

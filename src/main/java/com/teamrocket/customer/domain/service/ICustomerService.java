@@ -1,8 +1,8 @@
 package com.teamrocket.customer.domain.service;
 
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
-import com.teamrocket.customer.model.CustomerRegistrationRequest;
-import com.teamrocket.customer.model.entity.CustomerEntity;
+import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
+import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 
 import java.util.List;
 import java.util.Map;

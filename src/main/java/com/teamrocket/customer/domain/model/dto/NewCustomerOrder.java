@@ -1,6 +1,6 @@
-package com.teamrocket.customer.model.dto;
+package com.teamrocket.customer.domain.model.dto;
 
-import com.teamrocket.customer.model.enums.OrderStatus;
+import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import lombok.*;
 
 import java.util.Date;

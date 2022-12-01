@@ -1,6 +1,6 @@
 package com.teamrocket.customer;
 
-import com.teamrocket.customer.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.dto.NewCustomer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.teamrocket.customer.model;
+package com.teamrocket.customer.domain.model;
 
 
 public record CustomerRegistrationRequest(

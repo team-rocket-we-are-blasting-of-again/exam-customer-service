@@ -1,11 +1,11 @@
 package com.teamrocket.customer.application.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.teamrocket.customer.model.dto.NewOrder;
-import com.teamrocket.customer.model.CustomerRegistrationRequest;
+import com.teamrocket.customer.domain.model.dto.NewOrder;
+import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.domain.service.implementation.CamundaService;
 import com.teamrocket.customer.domain.service.implementation.CustomerService;
-import com.teamrocket.customer.model.entity.CustomerEntity;
+import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.Map;
 //@CrossOrigin(origins = "http://localhost:8012") //open for specific port
 @CrossOrigin() // open for all ports
 @RestController
-@RequestMapping(value = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
 
     @Autowired
@@ -34,14 +34,14 @@ public class CustomerController {
     /**
      * POST REQUEST
      */
-    @PostMapping("/customer")
+    @PostMapping("/customers")
     @Transactional
     public ResponseEntity<CustomerEntity> customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         log.info("New customer registered {}", customerRegistrationRequest);
         return ResponseEntity.ok(customerService.registerCustomer(customerRegistrationRequest));
     }
 
-    @PostMapping("/customer/new-order")
+    @PostMapping("/customers/new-order")
     public ResponseEntity<String> createNewOrder(@RequestHeader Map<String, String> header, @RequestBody NewOrder newOrder) throws JsonProcessingException {
         String customerId = header.get("role_id");
         return ResponseEntity.ok(camundaService.startOrderProcess(customerId, newOrder));
@@ -60,7 +60,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/customer/{id}")
+    @GetMapping("/customers/{id}")
     public ResponseEntity<CustomerEntity> getCustomerById(@PathVariable(value = "id") int id) {
         log.info("Customers was fetched with id: {}", id);
         return ResponseEntity.ok(customerService.getCustomerById(id));
@@ -69,7 +69,7 @@ public class CustomerController {
     /**
      * PUT REQUEST
      */
-    @PutMapping("/customer/{id}")
+    @PutMapping("/customers/{id}")
     public ResponseEntity<CustomerEntity> updateCustomer(@PathVariable(value = "id") int id, @RequestBody CustomerEntity customer) {
         log.info("Customers was updated with id: {}", id);
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
@@ -78,7 +78,7 @@ public class CustomerController {
     /**
      * DELETE REQUEST
      */
-    @DeleteMapping("/customer/{id}")
+    @DeleteMapping("/customers/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteCustomer(@PathVariable(value = "id") int id) {
         log.info("Customers was deleted with id: {}", id);
         return ResponseEntity.ok(customerService.deleteCustomer(id));

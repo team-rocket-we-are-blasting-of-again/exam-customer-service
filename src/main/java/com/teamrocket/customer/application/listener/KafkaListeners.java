@@ -1,7 +1,7 @@
-package com.teamrocket.customer.infrastructure.listener;
+package com.teamrocket.customer.application.listener;
 
-import com.teamrocket.customer.model.dto.*;
-import com.teamrocket.customer.model.enums.Topic;
+import com.teamrocket.customer.domain.model.dto.*;
+import com.teamrocket.customer.domain.model.enums.Topic;
 import com.teamrocket.customer.domain.service.implementation.KafkaService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaListeners {
 
-    private KafkaService kafkaService;
+    private final KafkaService kafkaService;
 
     public KafkaListeners(KafkaService kafkaService) {
         this.kafkaService = kafkaService;

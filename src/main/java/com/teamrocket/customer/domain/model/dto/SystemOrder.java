@@ -1,4 +1,4 @@
-package com.teamrocket.customer.model.dto;
+package com.teamrocket.customer.domain.model.dto;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class OrderCancelled {
+public class SystemOrder {
     private int systemOrderId;
-    private String reason;
 }
