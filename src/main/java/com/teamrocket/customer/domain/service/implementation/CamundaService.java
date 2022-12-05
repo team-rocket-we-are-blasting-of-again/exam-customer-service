@@ -7,7 +7,6 @@ import com.teamrocket.customer.domain.model.dto.StartOrderProcess;
 import com.teamrocket.customer.domain.model.dto.NewOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,13 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class CamundaService implements ICamundaService {
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Value("${camunda.server.engine}")
     private String restEngine;
@@ -30,10 +27,9 @@ public class CamundaService implements ICamundaService {
     @Value("${camunda.server.definition.key}")
     private String processDefinitionKey;
 
-    @Autowired
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-    public String startOrderProcess(String customerId, NewOrder newOrder) throws JsonProcessingException {
+    public String startOrderProcess(String customerId, NewOrder newOrder) {
         int parsedId = Integer.parseInt(customerId);
         newOrder.setCustomerId(parsedId);
 
@@ -45,16 +41,24 @@ public class CamundaService implements ICamundaService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        StartOrderProcess camundaRequest = StartOrderProcess.builder()
-                .variables(StartOrderProcess.OrderHolder
-                        .builder()
-                        .order(StartOrderProcess.CamundaOrder
-                                .builder()
-                                .value(mapper.writeValueAsString(newOrder))
-                                .type("json")
-                                .build())
-                        .build())
-                .build();
+        StartOrderProcess camundaRequest = null;
+        try {
+            camundaRequest = StartOrderProcess.builder()
+                    .variables(StartOrderProcess.OrderHolder
+                            .builder()
+                            .order(StartOrderProcess.CamundaOrder
+                                    .builder()
+                                    .value(mapper.writeValueAsString(newOrder))
+                                    .type("json")
+                                    .build())
+                            .build())
+                    .build();
+        } catch (JsonProcessingException exception) {
+            log.error("An object mapper exception has occurred: {}",
+                    "from camunda start order request",
+                    new RuntimeException(exception)
+            );
+        }
 
         HttpEntity<StartOrderProcess> request =
                 new HttpEntity<>(camundaRequest, headers);

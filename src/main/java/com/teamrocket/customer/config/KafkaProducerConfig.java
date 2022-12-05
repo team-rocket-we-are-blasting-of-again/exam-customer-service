@@ -1,7 +1,7 @@
 package com.teamrocket.customer.config;
 
 import com.teamrocket.customer.domain.model.dto.CustomerNotification;
-import com.teamrocket.customer.domain.model.dto.NewCustomer;
+import com.teamrocket.customer.domain.model.dto.NewCustomerOrder;
 import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,15 +20,25 @@ public class KafkaProducerConfig {
     private final KafkaUtil kafkaUtil;
 
     @Bean
-    public ProducerFactory<String, NewCustomer> producerFactory() {
+    public ProducerFactory<String, String> producerFactory() {
         return this.kafkaUtil.createClassProducerFactory();
     }
 
     @Bean
-    public KafkaTemplate<String, NewCustomer> kafkaTemplate() {
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(this.producerFactory());
     }
 
+//    @Bean
+//    public ProducerFactory<String, NewCustomer> producerFactory() {
+//        return this.kafkaUtil.createClassProducerFactory();
+//    }
+//
+//    @Bean
+//    public KafkaTemplate<String, NewCustomer> kafkaTemplate() {
+//        return new KafkaTemplate<>(this.producerFactory());
+//    }
+//
     /**
      * Customer notification for notification service
      */
@@ -42,4 +52,16 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(this.producerFactoryNotification());
     }
 
+    /**
+     * New customer order event notification
+     */
+    @Bean
+    public ProducerFactory<String, NewCustomerOrder> producerFactoryNewCustomerOrder() {
+        return this.kafkaUtil.createClassProducerFactory();
+    }
+
+    @Bean
+    public KafkaTemplate<String, NewCustomerOrder> kafkaTemplateNewCustomerOrder() {
+        return new KafkaTemplate<>(this.producerFactoryNewCustomerOrder());
+    }
 }

@@ -1,5 +1,6 @@
 package com.teamrocket.customer.domain.model.dto;
 
+import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
 import lombok.*;
 
@@ -17,4 +18,12 @@ public class CustomerDTO {
     private int addressId;
     private String phone;
     private List<CustomerOrderEntity> customerOrderEntity;
+
+    public CustomerDTO(CustomerEntity customer) {
+        this.firstName = customer.getFirstName();
+        this.lastName = customer.getLastName();
+        this.email = customer.getEmail();
+        this.addressId = customer.getAddressId();
+        this.phone = customer.getPhone();
+    }
 }

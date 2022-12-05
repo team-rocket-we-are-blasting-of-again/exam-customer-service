@@ -14,4 +14,15 @@ public class KafkaTopicConfig {
                 .partitions(3)
                 .build();
     }
+    @Bean
+    public NewTopic newOrderPlacedTopic() {
+        return TopicBuilder.name("NEW_ORDER_PLACED")
+                .build();
+    }
+
+    @Bean
+    public NewTopic customerNotificationTopic() {
+        return TopicBuilder.name("CUSTOMER_NOTIFICATION")
+                .build();
+    }
 }

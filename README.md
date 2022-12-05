@@ -23,6 +23,8 @@
 - picked up altid af courier og ikke customer?
 - add menuitemid i customerorder entity også!!!!!
 - spørg om den "rigtige" brug af entities og dtos
-
+- gRPC med restaurant service to update the price of a customer order
 - add more logging
 - @Activeprofiles ("integration" or "unit")
+- implement serializable
+- clean up entities

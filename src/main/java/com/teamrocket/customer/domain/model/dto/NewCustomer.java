@@ -1,10 +1,16 @@
 package com.teamrocket.customer.domain.model.dto;
 
-public record NewCustomer(
-        String firstName,
-        String lastName,
-        String email,
-        int addressId,
-        String phone
-) {
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class NewCustomer {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private int addressId;
+    private String phone;
 }

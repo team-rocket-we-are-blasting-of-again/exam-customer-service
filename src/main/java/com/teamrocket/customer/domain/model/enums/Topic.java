@@ -1,5 +1,8 @@
 package com.teamrocket.customer.domain.model.enums;
 
+import lombok.ToString;
+
+@ToString
 public enum Topic {
     CUSTOMER_NOTIFICATION,
     NEW_CUSTOMER,

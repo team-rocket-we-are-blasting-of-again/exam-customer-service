@@ -16,6 +16,26 @@ import java.util.Date;
 @Slf4j
 public class ErrorHandler {
 
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<Error> runTimeException(
+            RuntimeException runTimeException,
+            HttpServletRequest request) {
+
+        log.error("resource failed to map object exception : " +
+                runTimeException.getLocalizedMessage() +
+                " for " +
+                request.getRequestURI());
+
+        return new ResponseEntity<>(
+                Error.builder()
+                        .errorCode(HttpStatus.BAD_REQUEST.toString())
+                        .request(request.getRequestURI())
+                        .requestType(request.getMethod())
+                        .customMessage("Request is not valid")
+                        .timestamp(new Date())
+                        .build(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<Error> resourceNotFoundException(
             ResourceNotFoundException resourceNotFoundException,

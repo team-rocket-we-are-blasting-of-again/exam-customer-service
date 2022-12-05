@@ -1,5 +1,6 @@
 package com.teamrocket.customer.domain.service;
 
+import com.teamrocket.customer.domain.model.dto.CustomerDTO;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
@@ -8,13 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public interface ICustomerService {
-    CustomerEntity registerCustomer(CustomerRegistrationRequest request);
+    CustomerDTO registerCustomer(CustomerRegistrationRequest request);
 
-    List<CustomerEntity> getCustomers();
+    List<CustomerDTO> getCustomers();
 
-    CustomerEntity getCustomerById(int id) throws ResourceNotFoundException;
+    CustomerDTO getCustomerById(int id) throws ResourceNotFoundException;
 
-    CustomerEntity updateCustomer(int id, CustomerEntity customerRequest) throws ResourceNotFoundException;
+    CustomerDTO updateCustomer(int id, CustomerEntity customerRequest) throws ResourceNotFoundException;
 
-    Map<String, Boolean> deleteCustomer(int id) throws ResourceNotFoundException;
+    Map<String, Boolean> deleteCustomer(int id);
+
+//    @Query("SELECT c.name, co.orderPrice FROM Customer c JOIN c.customer_order")
+//    public List<CustomerOrder> getJoinInformation;
 }

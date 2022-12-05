@@ -1,11 +1,17 @@
 package com.teamrocket.customer.application.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.teamrocket.customer.domain.model.CartItems;
+import com.teamrocket.customer.domain.model.dto.CustomerDTO;
 import com.teamrocket.customer.domain.model.dto.NewOrder;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
+import com.teamrocket.customer.domain.model.entity.CartEntity;
 import com.teamrocket.customer.domain.service.implementation.CamundaService;
+import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import com.teamrocket.customer.domain.service.implementation.CustomerService;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,68 +25,97 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 //@CrossOrigin(origins = "http://localhost:8012") //open for specific port
 @CrossOrigin() // open for all ports
 @RestController
-@RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/customer", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
-
     @Autowired
     private CustomerService customerService;
     @Autowired
     private CamundaService camundaService;
 
+    @Autowired
+    CustomerOrderService customerOrderService;
+
+    public CustomerController(CustomerService customerService, CamundaService camundaService) {
+        this.customerService = customerService;
+        this.camundaService = camundaService;
+    }
+
 
     /**
      * POST REQUEST
      */
-    @PostMapping("/customers")
+    @PostMapping("/create")
     @Transactional
-    public ResponseEntity<CustomerEntity> customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
-        log.info("New customer registered {}", customerRegistrationRequest);
+    public ResponseEntity<CustomerDTO> customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
+        log.info("Create customer endpoint was hit with body: {}", customerRegistrationRequest);
         return ResponseEntity.ok(customerService.registerCustomer(customerRegistrationRequest));
     }
 
-    @PostMapping("/customers/new-order")
+    @PostMapping("/new-order")
     public ResponseEntity<String> createNewOrder(@RequestHeader Map<String, String> header, @RequestBody NewOrder newOrder) throws JsonProcessingException {
         String customerId = header.get("role_id");
+        log.info("New customer order endpoint was hit and initiated with customer id: {}",
+                customerId);
         return ResponseEntity.ok(camundaService.startOrderProcess(customerId, newOrder));
+    }
+
+    @PostMapping("/add-item-to-cart")
+    public ResponseEntity<CartEntity> addItemToCart(@RequestHeader Map<String, String> header, @RequestBody CartEntity cartEntity) throws JsonProcessingException {
+        String customerId = header.get("role_id");
+        log.info("Add item to cart endpoint was hit and customer has added a new item to their cart with customer id: {}",
+                customerId);
+        return ResponseEntity.ok(customerOrderService.addItemToCart(customerId, cartEntity));
     }
 
     /**
      * GET REQUEST
      */
-    @GetMapping("/customers")
-    public ResponseEntity<List<CustomerEntity>> getCustomers() {
-        log.info("All customers were fetched {}", LocalDateTime.now());
+    @GetMapping("/all")
+    public ResponseEntity<List<CustomerDTO>> getCustomers() {
+        log.info("Get all customers endpoint was hit {}", LocalDateTime.now());
         try {
             return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.OK);
         } catch (Exception exception) {
+            log.error("Customers exception has occurred: {}",
+                    "from get all customers endpoint",
+                    new Exception(exception)
+            );
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/customers/{id}")
-    public ResponseEntity<CustomerEntity> getCustomerById(@PathVariable(value = "id") int id) {
-        log.info("Customers was fetched with id: {}", id);
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable(value = "id") int id) {
+        log.info("Get customer by id endpoint was hit with id: {}", id);
         return ResponseEntity.ok(customerService.getCustomerById(id));
+    }
+
+    @GetMapping("/purchase-order")
+    public ResponseEntity<String> getCustomerById(@RequestHeader Map<String, String> header) {
+        String customerId = header.get("role_id");
+//        log.info("Get customer by id endpoint was hit with id: {}", customerId);
+        return ResponseEntity.ok(customerOrderService.purchaseOrder(customerId));
     }
 
     /**
      * PUT REQUEST
      */
-    @PutMapping("/customers/{id}")
-    public ResponseEntity<CustomerEntity> updateCustomer(@PathVariable(value = "id") int id, @RequestBody CustomerEntity customer) {
-        log.info("Customers was updated with id: {}", id);
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable(value = "id") int id, @RequestBody CustomerEntity customer) {
+        log.info("Update customer endpoint was hit with id: {}", id);
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 
     /**
      * DELETE REQUEST
      */
-    @DeleteMapping("/customers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteCustomer(@PathVariable(value = "id") int id) {
-        log.info("Customers was deleted with id: {}", id);
+        log.info("Delete customer endpoint was hit with id: {}", id);
         return ResponseEntity.ok(customerService.deleteCustomer(id));
     }
 

@@ -15,18 +15,20 @@ import java.util.List;
 public class MenuItemEntity {
     @Id
     @SequenceGenerator(
-            name = "customer_id_sequence",
-            sequenceName = "customer_id_sequence"
+            name = "menu_item_id_sequence",
+            sequenceName = "menu_item_id_sequence"
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "customer_id_sequence"
+            generator = "menu_item_id_sequence"
     )
     private int id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
+//    @ManyToOne(mappedBy = "menuItemId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<CustomerOrderEntity> items;
     @ManyToMany(mappedBy = "menuItemEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CustomerOrderEntity> items;
 }

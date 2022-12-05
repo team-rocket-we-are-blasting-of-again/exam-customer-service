@@ -1,6 +1,5 @@
 package com.teamrocket.customer.domain.model;
 
-
 public record CustomerRegistrationRequest(
         String firstName,
         String lastName,
