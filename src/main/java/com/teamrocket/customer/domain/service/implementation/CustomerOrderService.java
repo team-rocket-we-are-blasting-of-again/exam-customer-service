@@ -104,7 +104,7 @@ public class CustomerOrderService implements ICustomerOrderService {
         int parsedCustomerId = Integer.parseInt(customerId);
         CartEntity cartEntity = cartRepository.findById(parsedCustomerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer has no active cart with the given id: " + customerId));
-// TODO EITHER SAVE cart here or remove custoerId from cart and use normal id?
+// TODO: empty cart onces payment has been completed
         cartEntity.setCustomerId(parsedCustomerId);
         cartRepository.save(cartEntity);
 

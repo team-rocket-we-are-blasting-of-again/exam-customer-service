@@ -27,3 +27,5 @@
 - add Object to KafkaTemplate
 - gRPC where i return customer name, phone, addressId (I get a systemId from courier service)
   (add server dependency)
+- kafkaconfig refactoring
+- change customer order dto - Order status to string
