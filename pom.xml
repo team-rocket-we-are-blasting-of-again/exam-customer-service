@@ -79,6 +79,16 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- Prometheus monitoring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- gRPC -->
         <dependency>
             <groupId>net.devh</groupId>
@@ -220,7 +230,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>
-                        com.teamrocket.customer.control.CustomerController
+                        com.teamrocket.customer.application.controller.CustomerController
                     </baseClassForTests>
                 </configuration>
             </plugin>
