@@ -15,12 +15,6 @@
 - move classes to the right packages
 - Emit object (CustomerNotification) email, subject, message : CUSTOMER_NOTIFICATION - done
 - DTO instead of entity
-
-- SKAL VÆRE SIKKER PÅ AT NEWCUSTOMERORDER ID ER = SYSTEMORDER ID
-- FORTÆL OM RESTAURANTID OG MENUITEMID (JEG HAR IKKE NOGEN ADDR, STREE, PHONE PÅ RESTAURANT ELLER NOGEN MENU ITEMS)
-- ingen restaurant tlf
-- order status og topic passer ikke sammen?!?
-- picked up altid af courier og ikke customer?
 - add menuitemid i customerorder entity også!!!!!
 - spørg om den "rigtige" brug af entities og dtos
 - gRPC med restaurant service to update the price of a customer order
@@ -28,3 +22,8 @@
 - @Activeprofiles ("integration" or "unit")
 - implement serializable
 - clean up entities
+- new controller til cart/order
+- update email is not allowed
+- add Object to KafkaTemplate
+- gRPC where i return customer name, phone, addressId (I get a systemId from courier service)
+  (add server dependency)

@@ -103,7 +103,10 @@ public class CustomerOrderService implements ICustomerOrderService {
     public String purchaseOrder(String customerId) {
         int parsedCustomerId = Integer.parseInt(customerId);
         CartEntity cartEntity = cartRepository.findById(parsedCustomerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer with the given id has no active cart"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer has no active cart with the given id: " + customerId));
+// TODO EITHER SAVE cart here or remove custoerId from cart and use normal id?
+        cartEntity.setCustomerId(parsedCustomerId);
+        cartRepository.save(cartEntity);
 
         return camundaService.startOrderProcess(customerId, new NewOrder(cartEntity));
     }

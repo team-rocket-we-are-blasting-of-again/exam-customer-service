@@ -13,8 +13,7 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Builder
+//@Builder
 @Entity
 @Table(name = "customer_order")
 public class CustomerOrderEntity {
@@ -68,7 +67,6 @@ public class CustomerOrderEntity {
         this.deliver = cart.isWithDelivery();
     }
 
-    // TODO: add mapping for cartitementitylist to orderItemEntity
     private void addCartItemsToOrderItems(List<CartItemEntity> cartItems) {
         cartItems.forEach(cartItem ->
                 this.orderItems.add(new OrderItemEntity(cartItem))

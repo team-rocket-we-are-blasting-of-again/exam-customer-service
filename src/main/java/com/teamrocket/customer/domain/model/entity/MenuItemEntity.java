@@ -29,6 +29,6 @@ public class MenuItemEntity {
     private String description;
 //    @ManyToOne(mappedBy = "menuItemId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private List<CustomerOrderEntity> items;
-    @ManyToMany(mappedBy = "menuItemEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CustomerOrderEntity> items;
+//    @ManyToMany(mappedBy = "menuItemEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<CustomerOrderEntity> items;
 }

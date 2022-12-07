@@ -6,10 +6,12 @@ import com.teamrocket.customer.domain.model.dto.CustomerDTO;
 import com.teamrocket.customer.domain.model.dto.NewOrder;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.domain.model.entity.CartEntity;
+import com.teamrocket.customer.domain.model.entity.CartItemEntity;
 import com.teamrocket.customer.domain.service.implementation.CamundaService;
 import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import com.teamrocket.customer.domain.service.implementation.CustomerService;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
+import com.teamrocket.customer.infrastructure.repository.CartRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,10 @@ public class CustomerController {
 
     @Autowired
     CustomerOrderService customerOrderService;
+
+    // TODO: DELETE
+    @Autowired
+    CartRepository cartRepository;
 
     public CustomerController(CustomerService customerService, CamundaService camundaService) {
         this.customerService = customerService;
@@ -99,6 +106,13 @@ public class CustomerController {
         String customerId = header.get("role_id");
 //        log.info("Get customer by id endpoint was hit with id: {}", customerId);
         return ResponseEntity.ok(customerOrderService.purchaseOrder(customerId));
+    }
+
+    //TODO: DELETE
+    @GetMapping("/carts")
+    public ResponseEntity<CartItemEntity> getCustomerById() {
+        CartItemEntity test = new CartItemEntity();
+        return ResponseEntity.ok(test);
     }
 
     /**

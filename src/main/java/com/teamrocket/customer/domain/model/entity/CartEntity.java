@@ -13,12 +13,14 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+//@Builder
 @Entity
 @Table(name = "cart")
 public class CartEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
     @Column(name = "customer_id", unique = true, nullable = false)
     private int customerId;
     @Column(name = "restaurant_id")
@@ -28,7 +30,7 @@ public class CartEntity implements Serializable {
             fetch = FetchType.LAZY
 //            orphanRemoval = true
     )
-    @JoinColumn(name = "ci_fk", referencedColumnName = "id")
+    @JoinColumn(name = "ci_fk", referencedColumnName = "customer_id")
     private List<CartItemEntity> items = new ArrayList<>();
     @Column(name = "total_price")
     private int totalPrice;
