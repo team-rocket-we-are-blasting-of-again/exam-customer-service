@@ -102,7 +102,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DATABASE: auth
       TOKEN_DURATION_HOURS: 12
-      HAS_GATEWAY: false
+      HAS_GATEWAY: "false"
     networks:
       customer:
 
