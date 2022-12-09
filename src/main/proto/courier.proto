@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package com.teamrocket.proto;
+
+option java_multiple_files = true;
+option java_generic_services = true;
+
+message SystemOrderIdRequest{
+  int32 systemOrderId = 1;
+}
+
+message DeliveryDataResponse {
+  string customerName = 1;
+  string customerPhone = 2;
+  int32 dropOfAddressId = 3;
+}
+
+service CustomerService {
+  rpc getDeliveryData(SystemOrderIdRequest) returns (DeliveryDataResponse);
+}

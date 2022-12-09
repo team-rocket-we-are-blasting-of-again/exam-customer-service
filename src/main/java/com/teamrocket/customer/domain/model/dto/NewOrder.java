@@ -5,6 +5,7 @@ import com.teamrocket.customer.domain.model.entity.CartItemEntity;
 import com.teamrocket.customer.domain.model.entity.OrderItemEntity;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class NewOrder {
     private int restaurantId;
     private Date createdAt;
     private boolean withDelivery;
-    private List<OrderItemEntity> items;
+    private List<OrderItemEntity> items = new ArrayList<>();
 
     public NewOrder(CartEntity cart) {
         this.customerId = cart.getCustomerId();

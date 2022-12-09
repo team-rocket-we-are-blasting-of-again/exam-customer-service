@@ -79,6 +79,47 @@ services:
       - customer
     restart: unless-stopped
 
+  auth-postgres:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth
+    networks:
+      customer:
+
+  auth-service:
+    depends_on:
+      - auth-postgres
+    image: tobiaszimmer/exam_auth_service:feat-0.1.0
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      POSTGRES_HOST: auth-postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: auth
+      TOKEN_DURATION_HOURS: 12
+      HAS_GATEWAY: "false"
+    networks:
+      customer:
+
+  postgres_db:
+    image: postgres:14.1-alpine
+    restart: always
+    hostname: postgres
+    container_name: exam_restaurant_service_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Qwerty!234
+      - POSTGRES_DB=restaurants
+    ports:
+      - '6969:5432'
+    networks:
+      customer:
+
 networks:
   customer:
     driver: bridge

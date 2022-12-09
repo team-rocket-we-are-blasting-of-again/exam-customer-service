@@ -22,6 +22,8 @@ public class KafkaUtil {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapService;
 
+
+
     public <T> ConsumerFactory<String, T> createClassConsumerFactory(Class<T> clazz) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapService);

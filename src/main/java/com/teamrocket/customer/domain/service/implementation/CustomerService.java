@@ -2,6 +2,8 @@ package com.teamrocket.customer.domain.service.implementation;
 
 import com.google.protobuf.Descriptors;
 import com.teamrocket.customer.domain.model.dto.CustomerDTO;
+import com.teamrocket.customer.domain.model.dto.CustomerNotification;
+import com.teamrocket.customer.domain.model.enums.Topic;
 import com.teamrocket.customer.domain.service.ICustomerService;
 import com.teamrocket.customer.domain.model.dto.NewCustomer;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
@@ -10,6 +12,7 @@ import com.teamrocket.customer.infrastructure.repository.CustomerRepository;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +25,10 @@ import java.util.Map;
 @Slf4j
 @Service
 public class CustomerService implements ICustomerService {
-    private final RPCService rpcService;
+    private final AuthClient authClient;
     private final CustomerRepository customerRepository;
     private final KafkaService kafkaService;
+
 
     @Override
     @Transactional
@@ -47,7 +51,7 @@ public class CustomerService implements ICustomerService {
         log.info("New customer registration was successfully saved in customer service with unique email: {}",
                 newCustomer.getEmail());
 
-        Map<Descriptors.FieldDescriptor, Object> authedCustomer = rpcService.createCustomer(customer, request);
+        Map<Descriptors.FieldDescriptor, Object> authedCustomer = authClient.createCustomer(customer, request);
         log.info("New customer was successfully authed from auth service with request: {}",
                 authedCustomer);
 
@@ -147,6 +151,33 @@ public class CustomerService implements ICustomerService {
         response.put("Deleted", Boolean.TRUE);
 
         return response;
+    }
+
+    public void notifyCustomer(CustomerDTO customer, Topic kafkaTopic) {
+        String subject = "";
+        String messageBody = "";
+
+        // TODO: IMPLEMEN LOGGING HERE AS WELL
+        // TODO: Implement all cases
+        switch (kafkaTopic) {
+            case NEW_ORDER_PLACED:
+                subject = "MTOGO: New order has been placed";
+                messageBody = "Thank you for your order. We will begin the process of validating your " +
+                        "order and will keep you updated throughout the whole process.";
+                break;
+            default:
+                // TODO: real error handling implementation
+                throw new RuntimeException("BLABLABLA");
+        }
+
+        CustomerNotification customerNotification = CustomerNotification.builder()
+                .email(customer.getEmail())
+                .subject(subject)
+                .message("Dear " + customer.getFirstName() + " " + customer.getLastName()
+                        + ",\n" + messageBody)
+                .build();
+
+        kafkaService.customerNotificationEvent(customerNotification);
     }
 
 }

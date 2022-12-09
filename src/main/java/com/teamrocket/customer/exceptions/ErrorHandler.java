@@ -24,7 +24,7 @@ public class ErrorHandler {
         log.error("resource failed to map object exception : " +
                 runTimeException.getLocalizedMessage() +
                 " for " +
-                request.getRequestURI());
+                request.getRequestURI(), runTimeException);
 
         return new ResponseEntity<>(
                 Error.builder()
@@ -64,7 +64,7 @@ public class ErrorHandler {
         log.error("authentication failed exception : " +
                 statusRuntimeException.getLocalizedMessage() +
                 " for " +
-                request.getRequestURI());
+                request.getRequestURI(), statusRuntimeException);
 
         return new ResponseEntity<>(
                 Error.builder()

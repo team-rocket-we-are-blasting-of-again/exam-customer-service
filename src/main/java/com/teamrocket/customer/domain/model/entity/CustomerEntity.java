@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "customer", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "phone_number")})
 public class CustomerEntity {
@@ -48,10 +49,12 @@ public class CustomerEntity {
 //                    referencedColumnName = "id")})
 //    @MapKeyJoinColumn(name = "customer_order_id")
 //    @Column(name = "customer_order")
-    @OneToMany(targetEntity = CustomerOrderEntity.class,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            orphanRemoval = true)
-    @JoinColumn(name = "co_fk", referencedColumnName = "id")
-    private List<CustomerOrderEntity> customerOrderEntity = new ArrayList<>();
+//    @OneToMany(targetEntity = CustomerOrderEntity.class,
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,
+//            orphanRemoval = true)
+    //  @JoinColumn(name = "co_fk", referencedColumnName = "id")
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.EAGER)
+    private List<CustomerOrderEntity> customerOrder = new ArrayList<>();
 }

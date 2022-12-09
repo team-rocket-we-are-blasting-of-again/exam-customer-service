@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaListeners {
     private final CustomerService customerService;
-    private final KafkaService kafkaService;
     private final CustomerOrderService customerOrderService;
 
     private final ObjectMapper objectMapper;
@@ -28,45 +27,24 @@ public class KafkaListeners {
     // TODO: For testing, remove when moving to production
     @KafkaListener(
             topics = "NEW_CUSTOMER",
-            groupId = "customerId", // Unique id when scaling
-            containerFactory = "messageFactory" // KafkaConsumeConfig method name
+            groupId = "customerId" // Unique id when scaling
     )
-    void listener(String dataString) {
-        NewCustomer data = null;
-        try {
-            data = objectMapper.readValue(dataString, NewCustomer.class);
-            assert data != null;
-            System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s%n%s%n%s%n: ",
-                    data.getFirstName(),
-                    data.getLastName(),
-                    data.getEmail(),
-                    data.getAddressId(),
-                    data.getPhone());
-        } catch (JsonProcessingException exception) {
-            log.error("New customer exception has occurred: {}",
-                    "from kafka event listener",
-                    new RuntimeException(exception)
-            );
-        }
+    void listener(NewCustomer data) {
+
+        System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s%n%s%n%s%n: ",
+                data.getFirstName(),
+                data.getLastName(),
+                data.getEmail(),
+                data.getAddressId(),
+                data.getPhone());
 
     }
 
     @KafkaListener(
             topics = "CUSTOMER_NOTIFICATION",
-            groupId = "customerId", // Unique id when scaling
-            containerFactory = "messageFactory" // KafkaConsumeConfig method name
+            groupId = "customerId" // Unique id when scaling
     )
-    void customerNotificationListener(String dataString) {
-        CustomerNotification data = null;
-        try {
-            data = objectMapper.readValue(dataString, CustomerNotification.class);
-        } catch (JsonProcessingException exception) {
-            log.error("New customer notification exception has occurred: {} from kafka event listener. Request received to listener was: {}",
-                    new RuntimeException(exception),
-                    dataString
-            );
-        }
-        assert data != null;
+    void customerNotificationListener(CustomerNotification data) {
         System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s: ",
                 data.getEmail(),
                 data.getSubject(),
@@ -76,8 +54,7 @@ public class KafkaListeners {
     // TODO: Update status on customer order in database and order dto
     @KafkaListener(
             topics = "NEW_ORDER_PLACED",
-            groupId = "new-order-id", // unique id when scaling
-            containerFactory = "messageFactoryCustomerNotification" // KafkaConsumeConfig method name
+            groupId = "new-order-id" // unique id when scaling
     )
     void newOrderPlaceListener(NewCustomerOrder data) {
 //        NewCustomerOrder newCustomerOrder = objectMapper.readValue(dataString, NewCustomerOrder.class);
@@ -92,7 +69,6 @@ public class KafkaListeners {
 
         CustomerOrderEntity customerOrder = customerOrderService.createCustomerOrder(customer, data);
 
-
         customerOrderService.emptyCart(data.getCustomerId());
 
         log.info("New customer order listener successfully stored customer with email {} from consumed event with topic {}",
@@ -104,35 +80,10 @@ public class KafkaListeners {
         customerOrderService.updateSystemOrder(OrderStatus.PENDING, data.getId());
 
         // emit customer notification event
-        notifyCustomer(customer, Topic.NEW_ORDER_PLACED);
+        customerService.notifyCustomer(customer, Topic.NEW_ORDER_PLACED);
     }
 
-    private void notifyCustomer(CustomerDTO customer, Topic kafkaTopic) {
-        String subject = "";
-        String messageBody = "";
 
-        // TODO: IMPLEMEN LOGGING HERE AS WELL
-        // TODO: Implement all cases
-        switch (kafkaTopic) {
-            case NEW_ORDER_PLACED:
-                subject = "MTOGO: New order has been placed";
-                messageBody = "Thank you for your order. We will begin the process of validating your " +
-                        "order and will keep you updated throughout the whole process.";
-                break;
-            default:
-                // TODO: real error handling implementation
-                throw new RuntimeException("BLABLABLA");
-        }
-
-        CustomerNotification customerNotification = CustomerNotification.builder()
-                .email(customer.getEmail())
-                .subject(subject)
-                .message("Dear " + customer.getFirstName() + " " + customer.getLastName()
-                        + ",%n" + messageBody)
-                .build();
-
-        kafkaService.customerNotificationEvent(kafkaTopic, customerNotification);
-    }
 //
 //    @KafkaListener(
 //            topics = "ORDER_ACCEPTED",

@@ -9,6 +9,13 @@
         "rolesAllowed": []
       },
       {
+        "path": "/customers/v1/customers/all",
+        "method": "BEARER",
+        "rolesAllowed": [
+          "MANAGEMENT"
+        ]
+      },
+      {
         "path": "/customers/v1/**",
         "method": "BEARER",
         "rolesAllowed": [
