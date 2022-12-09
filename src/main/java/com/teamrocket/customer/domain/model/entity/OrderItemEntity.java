@@ -1,11 +1,18 @@
 package com.teamrocket.customer.domain.model.entity;
 
 import com.teamrocket.customer.domain.model.dto.OrderItem;
-import lombok.*;
-
-import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,17 +22,12 @@ import java.util.List;
 @Entity
 @Table(name = "order_item")
 public class OrderItemEntity implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(
-//            name = "order_item_id_sequence",
-//            sequenceName = "order_item_id_sequence"
-//    )
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "order_item_id_sequence"
-//    )
     private int id;
     private int menuItemId;
     private int quantity;
