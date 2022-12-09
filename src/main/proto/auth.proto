@@ -1,16 +1,9 @@
 syntax = "proto3";
 
-package com.teamrocket;
+package com.teamrocket.proto;
 
 option java_multiple_files = true;
-
-service Verify {
-  rpc VerifyUser (VerifyUserRequest) returns (VerifyUserResponse);
-}
-
-service User {
-  rpc createUser (CreateUserRequest) returns (CreateUserResponse);
-}
+option java_generic_services = true;
 
 message VerifyUserRequest {
   string jwt = 1;
@@ -30,6 +23,14 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   int32 id = 1;
+}
+
+service Verify {
+  rpc VerifyUser (VerifyUserRequest) returns (VerifyUserResponse);
+}
+
+service User {
+  rpc createUser (CreateUserRequest) returns (CreateUserResponse);
 }
 
 enum Role {

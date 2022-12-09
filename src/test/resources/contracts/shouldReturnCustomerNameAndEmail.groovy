@@ -16,6 +16,5 @@ Contract.make {
     }
     response {
         status 200
-
     }
 }

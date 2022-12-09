@@ -46,11 +46,6 @@ public class CustomerController {
     @Autowired
     CartRepository cartRepository;
 
-    public CustomerController(CustomerService customerService, CamundaService camundaService) {
-        this.customerService = customerService;
-        this.camundaService = camundaService;
-    }
-
 
     /**
      * POST REQUEST
@@ -60,14 +55,6 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> customerRegistration(@RequestBody CustomerRegistrationRequest customerRegistrationRequest) {
         log.info("Create customer endpoint was hit with body: {}", customerRegistrationRequest);
         return ResponseEntity.ok(customerService.registerCustomer(customerRegistrationRequest));
-    }
-
-    @PostMapping("/new-order")
-    public ResponseEntity<String> createNewOrder(@RequestHeader Map<String, String> header, @RequestBody NewOrder newOrder) throws JsonProcessingException {
-        String customerId = header.get("role_id");
-        log.info("New customer order endpoint was hit and initiated with customer id: {}",
-                customerId);
-        return ResponseEntity.ok(camundaService.startOrderProcess(customerId, newOrder));
     }
 
     @PostMapping("/add-item-to-cart")

@@ -1,4 +1,4 @@
-package com.teamrocket.customer.config;
+package com.teamrocket.customer.config.kafka;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

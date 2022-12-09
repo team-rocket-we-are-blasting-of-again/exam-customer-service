@@ -21,21 +21,20 @@ public class CustomerApplication {
         SpringApplication.run(CustomerApplication.class, args);
     }
 
-    ObjectMapper objectMapper = new ObjectMapper();
 
     // TODO: REMOVE when it is time to deploy
     @Bean
-    CommandLineRunner commandLineRunner(KafkaTemplate<String, String> kafkaTemplate) {
+    CommandLineRunner commandLineRunner(KafkaTemplate<String, Object> kafkaTemplate) {
         return args -> {
             for (int i = 0; i < 2; i++) {
-                kafkaTemplate.send("NEW_CUSTOMER", objectMapper.writeValueAsString(new NewCustomer("JP", "LM", "email@email.com", 12 + i, "12345678")));
+                kafkaTemplate.send("NEW_CUSTOMER", new NewCustomer("JP", "LM", "email@email.com", 12 + i, "12345678"));
             }
         };
     }
 
     NewCustomerOrder newCustomerOrder = NewCustomerOrder.builder()
-            .id(3)
-            .restaurantId(6)
+            .id(14)
+            .restaurantId(1)
             .customerId(1)
             .createdAt(new Date())
             .status(OrderStatus.PENDING)
@@ -45,23 +44,9 @@ public class CustomerApplication {
             .build();
 
     @Bean
-    CommandLineRunner commandLineRunnerNewOrder(KafkaTemplate<String, NewCustomerOrder> kafkaTemplateOrderEventTest) {
-        return args -> {
-            for (int i = 0; i <= 1; i++) {
-                kafkaTemplateOrderEventTest.send("NEW_ORDER_PLACED", newCustomerOrder);
-            }
-        };
+    CommandLineRunner commandLineRunnerNewOrder(KafkaTemplate<String, Object> kafkaTemplateOrderEventTest) {
+        return args -> kafkaTemplateOrderEventTest.send("NEW_ORDER_PLACED", newCustomerOrder);
     }
 
-//    private int menuItemId;
-//    private int quantity;
-//    private int id;
-//    private int restaurantId;
-//    private int customerId;
-//    private Date createdAt;
-//    private OrderStatus status; // TODO: might have to change this to string
-//    private boolean withDelivery;
-//    private double totalPrice;
-//    private List<OrderItem> items;
 
 }

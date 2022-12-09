@@ -13,7 +13,7 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@Builder
+@Builder
 @Entity
 @Table(name = "customer_order")
 public class CustomerOrderEntity {
@@ -22,7 +22,7 @@ public class CustomerOrderEntity {
     private int id;
     @OneToMany(targetEntity = OrderItemEntity.class,
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     @JoinColumn(name = "coi_fk", referencedColumnName = "id")
     @Column(name = "order_items")
     private List<OrderItemEntity> orderItems = new ArrayList<>();
@@ -38,10 +38,14 @@ public class CustomerOrderEntity {
     private double orderPrice;
     @Column(name = "restaurant_id", nullable = false)
     private int restaurantId;
-    @Column(name = "system_order_id")
+    @Column(name = "system_order_id", nullable = false, unique = true)
     private int systemOrderId;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    CustomerEntity customer;
 
     public CustomerOrderEntity(NewCustomerOrder dto) {
         addOrderItemToOrderItemEntity(dto.getItems());
@@ -50,6 +54,7 @@ public class CustomerOrderEntity {
         this.deliveryPrice = dto.getDeliveryPrice();
         this.orderPrice = dto.getTotalPrice();
         this.restaurantId = dto.getRestaurantId();
+        this.systemOrderId = dto.getId();
         this.status = OrderStatus.PENDING;
     }
 
@@ -59,6 +64,7 @@ public class CustomerOrderEntity {
         );
     }
 
+    // TODO: DELETE IF NOT USED?!?
     public CustomerOrderEntity(CartEntity cart) {
         this.restaurantId = cart.getCustomerId();
         this.restaurantId = cart.getRestaurantId();
