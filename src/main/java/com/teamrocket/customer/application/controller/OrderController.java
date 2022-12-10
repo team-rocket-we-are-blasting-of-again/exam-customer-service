@@ -21,9 +21,9 @@ public class OrderController {
     CustomerOrderService customerOrderService;
 
     /**
-     * GET REQUEST
+     * POST REQUEST
      */
-    @GetMapping("/purchase")
+    @PostMapping("/purchase")
     public ResponseEntity<String> purchaseOrderByCustomerById(@RequestHeader Map<String, String> header) {
         String customerId = header.get("role_id");
         log.info("Customer purchase orders endpoint was hit with customer id: {}", customerId);
