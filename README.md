@@ -16,10 +16,11 @@
 - clean up entities
 - do not use autowired - use private final @RequiredArgsConstructor
 - interfaces
-- new controller til cart/order
-- update email is not allowed
-- kafka listener update -
-- switch case complete -
-- gRPC med restaurant service to update the price of a customer order - done
-- discuss with group about groupid in kafka listener
+- new controller til cart/order -
+- update email is not allowed -
+-
+- Discuss with group about groupid in kafka listener
+- Order items kan ikke tilføjes til en receipt, da der ikke gemmes order items hos mig. Kun
+- en cart som bliver slettes efter køb. Skulle order service ikke sende hvilke ordre som var med
+- på et køb?
 

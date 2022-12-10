@@ -1,12 +1,9 @@
 package com.teamrocket.customer.domain.model.dto;
 
-import com.teamrocket.customer.domain.model.entity.OrderItemEntity;
 import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

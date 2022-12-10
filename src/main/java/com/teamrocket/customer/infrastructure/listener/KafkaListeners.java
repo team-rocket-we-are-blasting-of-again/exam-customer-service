@@ -26,14 +26,12 @@ public class KafkaListeners {
             groupId = "customerId" // Unique id when scaling
     )
     void listener(NewCustomer data) {
-
         System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s%n%s%n%s%n: ",
                 data.getFirstName(),
                 data.getLastName(),
                 data.getEmail(),
                 data.getAddressId(),
                 data.getPhone());
-
     }
 
     // TODO: For testing, remove when moving to production
@@ -48,12 +46,12 @@ public class KafkaListeners {
                 data.getMessage());
     }
 
-    // TODO: Update status on customer order in database and order dto
     @KafkaListener(
             topics = "NEW_ORDER_PLACED",
             groupId = "new-order-id" // unique id when scaling
     )
     void newOrderPlaceListener(NewCustomerOrder data) {
+        log.info("Kafka listener with topic NEW_ORDER_PLACED was hit");
         // find customer by id
         CustomerDTO customer = customerService.getCustomerById(data.getCustomerId());
 
@@ -87,7 +85,8 @@ public class KafkaListeners {
             groupId = "order-accepted-id" // unique id when scaling
     )
     void orderAcceptedListener(SystemOrder data) {
-           // set status on order in db
+        log.info("Kafka listener with topic ORDER_ACCEPTED was hit");
+        // set status on order in db
         customerOrderService.updateSystemOrder(OrderStatus.IN_PROGRESS, data.getSystemOrderId());
 
         // find customer with system order id
@@ -99,107 +98,102 @@ public class KafkaListeners {
         // emit customer notification event
         customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
     }
-//
-//    @KafkaListener(
-//            topics = "ORDER_READY",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderReadyListener(SystemOrder data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.READY, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order is ready for pickup.")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "The restaurant has now finished your order and is ready to be enjoyed.")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_READY, customerNotification);
-//    }
-//
-//    @KafkaListener(
-//            topics = "ORDER_CANCELED",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderCanceledListener(OrderCancelled data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.CANCELLED, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order has been cancelled.")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "Your order has been cancelled. The reason for this is: " + data.getReason()
-//                        + "%nIf you did not cancel your order please try again or feel free to contact our customer support for further " +
-//                        "information or questions you might have.")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_CANCELED, customerNotification);
-//    }
-//
-//    @KafkaListener(
-//            topics = "ORDER_PICKED_UP",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderPickedUpListener(SystemOrder data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.PICKED_UP, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order has been picked up.")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "You order has been picked up by our courier and will be with your shortly.")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_PICKED_UP, customerNotification);
-//    }
-//
-//    @KafkaListener(
-//            topics = "ORDER_DELIVERED",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderDeliveredListener(SystemOrder data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.COMPLETED, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order has been delivered.")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "Your order has been delivered by our courier." + ".%nThank you for your order and we hope our service was as expected."
-//                        + "%nYour receipt will look as the following: "
-//                        + "Delivery cost: " + customerOrder.getDeliveryPrice() + "%nTotal order price: " + customerOrder.getOrderPrice()
-//                        + "Kind regards"
-//                        + "%n%n"
-//                        + "MTOGO A/S")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_DELIVERED, customerNotification);
-//    }
-//
-//    @KafkaListener(
-//            topics = "ORDER_CLAIMED",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderClaimedListener(SystemOrder data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.CLAIMED, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order has been claimed.")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "You order has been claimed by one of our couriers.")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_CLAIMED, customerNotification);
-//    }
 
+    @KafkaListener(
+            topics = "ORDER_READY",
+            groupId = "order-reader-id" // unique id when scaling
+    )
+    void orderReadyListener(SystemOrder data) {
+        log.info("Kafka listener with topic ORDER_READY was hit");
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.READY, data.getSystemOrderId());
+
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
+
+    @KafkaListener(
+            topics = "ORDER_CANCELED",
+            groupId = "order-cancelled-id" // unique id when scaling
+    )
+    void orderCanceledListener(OrderCancelled data) {
+        log.info("Kafka listener with topic ORDER_CANCELED was hit");
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.CANCELLED, data.getSystemOrderId());
+
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // set cancellation reason
+        customer.setReason(data.getReason());
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
+
+    @KafkaListener(
+            topics = "ORDER_PICKED_UP",
+            groupId = "order-picked-up-id" // unique id when scaling
+    )
+    void orderPickedUpListener(SystemOrder data) {
+        log.info("Kafka listener with topic ORDER_PICKED_UP was hit");
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.PICKED_UP, data.getSystemOrderId());
+
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
+
+    @KafkaListener(
+            topics = "ORDER_DELIVERED",
+            groupId = "order-delivered-id" // unique id when scaling
+    )
+    void orderDeliveredListener(SystemOrder data) {
+        log.info("Kafka listener with topic ORDER_DELIVERED was hit");
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.COMPLETED, data.getSystemOrderId());
+
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
+
+    @KafkaListener(
+            topics = "ORDER_CLAIMED",
+            groupId = "order-claimed-id" // unique id when scaling
+    )
+    void orderClaimedListener(SystemOrder data) {
+        log.info("Kafka listener with topic ORDER_CLAIMED was hit");
+        // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.COMPLETED, data.getSystemOrderId());
+
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
 }

@@ -18,14 +18,6 @@ public class OrderItemEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(
-//            name = "order_item_id_sequence",
-//            sequenceName = "order_item_id_sequence"
-//    )
-//    @GeneratedValue(
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "order_item_id_sequence"
-//    )
     private int id;
     private int menuItemId;
     private int quantity;

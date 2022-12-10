@@ -12,7 +12,6 @@ import com.teamrocket.customer.infrastructure.repository.CustomerRepository;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,8 @@ public class CustomerService implements ICustomerService {
     @Override
     @Transactional
     public CustomerDTO registerCustomer(CustomerRegistrationRequest request) {
-        // TODO: Call location service before making a customer
+        // TODO: Not implemented but the plan was to have a location service
+        // call that location service before making a customer
         // Send address to location service and location will give me an address id
         // gRPC call to location service to get the address id
         CustomerEntity customer = CustomerEntity.builder()
@@ -163,38 +163,68 @@ public class CustomerService implements ICustomerService {
             case NEW_ORDER_PLACED:
                 subject = "MTOGO: New order has been placed";
                 messageBody = "Thank you for your order. \nWe will begin the process of validating your " +
-                        "order and will keep you updated throughout the whole process.";
+                        "order and will keep you updated throughout the whole process." +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_ACCEPTED:
                 subject = "MTOGO: Order has been accepted";
                 messageBody = "Your order has been accepted and preparation has started at " + customer.getCustomerOrderList().get(0).getCreatedAt() +
-                        "\nWe will inform you when the order is ready.";
+                        "\nWe will inform you when the order is ready." +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_READY:
-                subject = "";
-                messageBody = "";
+                subject = "MTOGO: Order is ready for pickup";
+                messageBody = "The restaurant has now finished your order and the food is ready to be enjoyed." +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_CANCELED:
-                subject = "";
-                messageBody = "";
+                subject = "MTOGO: Order has been cancelled";
+                messageBody = "Your order has been cancelled. \nThe reason for this is as follows: " + customer.getReason() + "." +
+                        "If you did not cancel your order please try again or feel free to contact our customer support for further information or questions you might have. " +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_PICKED_UP:
-                subject = "";
-                messageBody = "";
+                subject = "MTOGO: Order has been picked up";
+                messageBody = "Your order has been picked up by our courier and will be with you shortly." +
+                        "\nYour order consists of: " + customer.getCustomerOrderList() +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_DELIVERED:
-                subject = "";
-                messageBody = "";
+                subject = "MTOGO: Order has been delivered";
+                messageBody = "Your order has been delivered by our courier." +
+                        "\nThank you for your order and we hope our service was of high quality and met your expectations." +
+                        " If you have any comments please do not hesitate to let us know. We hope to hear from you soon again." +
+                        "\n\nYour receipt will look as follows: \n" +
+                        "Time your food was prepared: " + customer.getCustomerOrderList().get(0).getCreatedAt() +
+                        "\nDelivery price: " + customer.getCustomerOrderList().get(0).getDeliveryPrice() +
+                        "\nWith a total order price of: " + customer.getCustomerOrderList().get(0).getOrderPrice() +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             case ORDER_CLAIMED:
-                subject = "";
-                messageBody = "";
+                subject = "MTOGO: Order has been claimed";
+                messageBody = "You order has been claimed by one of our couriers. " +
+                        "\nWe will inform your when the courier has picked up your order." +
+                        "\nKind regards, " +
+                        "\n\nMTOGO A/S";
+
                 log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             default:
@@ -207,6 +237,8 @@ public class CustomerService implements ICustomerService {
                 .subject(subject)
                 .message("Dear " + customer.getFirstName() + " " + customer.getLastName() + ",\n" + messageBody)
                 .build();
+
+        log.info("Kafka event for notification service was build with the following body: {}", customerNotification);
 
         kafkaService.customerNotificationEvent(customerNotification);
     }

@@ -10,7 +10,6 @@ import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
 import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import com.teamrocket.customer.domain.service.ICustomerOrderService;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
-import com.teamrocket.customer.infrastructure.repository.CartItemRepository;
 import com.teamrocket.customer.infrastructure.repository.CartRepository;
 import com.teamrocket.customer.infrastructure.repository.CustomerOrderRepository;
 import com.teamrocket.customer.infrastructure.repository.CustomerRepository;
@@ -35,10 +34,7 @@ public class CustomerOrderService implements ICustomerOrderService {
     private final CustomerRepository customerRepository;
 
     @Autowired
-    private CartItemRepository cartItemRepository;
-
-    @Autowired
-    RestaurantClient restaurantClient;
+    private RestaurantClient restaurantClient;
 
     @Autowired
     private CamundaService camundaService;
@@ -80,9 +76,13 @@ public class CustomerOrderService implements ICustomerOrderService {
     @Override
     public CartEntity addItemToCart(String customerId, CartEntity cartEntity) {
         int parsedCustomerId = Integer.parseInt(customerId);
+
         cartEntity.setCustomerId(parsedCustomerId);
         CartEntity newCustomerCartEntity = findCartForCustomer(cartEntity);
-        log.info("Adding item to cart from cart with: " + cartEntity);
+
+        log.info("Adding item to customer cart with customer id {} and with cart properties: {}",
+                customerId,
+                cartEntity);
 
         newCustomerCartEntity.setTotalPrice(restaurantClient.restaurantCalculateTotalPrice(cartEntity));
 

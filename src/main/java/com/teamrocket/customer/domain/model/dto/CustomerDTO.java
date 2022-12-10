@@ -20,6 +20,7 @@ public class CustomerDTO {
     private int addressId;
     private String phone;
     private List<CustomerOrderDTO> customerOrderList;
+    private String reason;
 
     public CustomerDTO(CustomerEntity customer) {
         this.firstName = customer.getFirstName();
@@ -33,6 +34,7 @@ public class CustomerDTO {
                         .createdAt(order.getCreatedAt())
                         .deliver(order.isDeliver())
                         .deliveryPrice(order.getDeliveryPrice())
+                        .orderPrice(order.getOrderPrice())
                         .restaurantId(order.getRestaurantId())
                         .systemOrderId(order.getSystemOrderId())
                         .status(order.getStatus())
@@ -51,6 +53,7 @@ public class CustomerDTO {
                         .createdAt(order.getCreatedAt())
                         .deliver(order.isDeliver())
                         .deliveryPrice(order.getDeliveryPrice())
+                        .orderPrice(order.getOrderPrice())
                         .restaurantId(order.getRestaurantId())
                         .systemOrderId(order.getSystemOrderId())
                         .status(order.getStatus())
