@@ -27,13 +27,9 @@ import java.util.Optional;
 @Service
 public class CustomerOrderService implements ICustomerOrderService {
     private final CustomerOrderRepository customerOrderRepository;
-
     private final CartRepository cartRepository;
-
     private final CustomerRepository customerRepository;
-
     private final RestaurantClient restaurantClient;
-
     private final CamundaService camundaService;
 
     @Override

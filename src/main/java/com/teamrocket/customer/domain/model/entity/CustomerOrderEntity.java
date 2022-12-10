@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
@@ -16,7 +17,9 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "customer_order")
-public class CustomerOrderEntity {
+public class CustomerOrderEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -64,7 +67,6 @@ public class CustomerOrderEntity {
         );
     }
 
-    // TODO: DELETE IF NOT USED?!?
     public CustomerOrderEntity(CartEntity cart) {
         this.restaurantId = cart.getCustomerId();
         this.restaurantId = cart.getRestaurantId();

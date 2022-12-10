@@ -1,8 +1,5 @@
 package com.teamrocket.customer.config.kafka;
 
-import com.teamrocket.customer.domain.model.dto.CustomerNotification;
-import com.teamrocket.customer.domain.model.dto.NewCustomerOrder;
-import com.teamrocket.customer.util.KafkaUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

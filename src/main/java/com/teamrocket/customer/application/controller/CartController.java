@@ -5,7 +5,6 @@ import com.teamrocket.customer.domain.model.entity.CartEntity;
 import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/carts", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CartController {
-    @Autowired
-    CustomerOrderService customerOrderService;
+    private final CustomerOrderService customerOrderService;
 
     /**
      * POST REQUEST

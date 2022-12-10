@@ -7,6 +7,7 @@ import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
 import com.teamrocket.customer.infrastructure.repository.CustomerOrderRepository;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Slf4j
 @GrpcService
 public class CustomerCourierServerService extends CustomerServiceGrpc.CustomerServiceImplBase {
 
-    @Autowired
-    CustomerOrderRepository customerOrderRepository;
+    private final CustomerOrderRepository customerOrderRepository;
 
     @Override
     public void getDeliveryData(SystemOrderIdRequest request, StreamObserver<DeliveryDataResponse> responseObserver) {

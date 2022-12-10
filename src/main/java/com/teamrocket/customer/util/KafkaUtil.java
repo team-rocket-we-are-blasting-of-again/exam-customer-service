@@ -18,11 +18,8 @@ import java.util.Map;
 
 @Component
 public class KafkaUtil {
-
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapService;
-
-
 
     public <T> ConsumerFactory<String, T> createClassConsumerFactory(Class<T> clazz) {
         Map<String, Object> props = new HashMap<>();
@@ -37,7 +34,7 @@ public class KafkaUtil {
                 new JsonDeserializer<>(clazz)
         );
     }
-
+    
     public <T> ProducerFactory<String, T> createClassProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapService);

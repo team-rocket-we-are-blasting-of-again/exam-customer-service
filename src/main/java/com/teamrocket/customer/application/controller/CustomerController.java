@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/customers", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CustomerController {
+    //Only autowired used in the service because of contract verifier test will fail without
     @Autowired
     private CustomerService customerService;
 

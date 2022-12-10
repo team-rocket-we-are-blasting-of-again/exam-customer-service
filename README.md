@@ -12,9 +12,7 @@
 - move classes to the right packages
 - DTO instead of entity
 - add more logging
-- implement serializable
 - clean up entities
-- do not use autowired - use private final @RequiredArgsConstructor
 -
 - update email is not allowed - spørg tobias om det skulle have været i auth service
 - Discuss with group about groupid in kafka listener
