@@ -13,8 +13,9 @@
 - add more logging
 - implement serializable
 - clean up entities
+- do not use autowired - use private final
 - new controller til cart/order
 - update email is not allowed
-- switch case complete
-- gRPC med restaurant service to update the price of a customer order
+- switch case complete -
+- gRPC med restaurant service to update the price of a customer order - done
 

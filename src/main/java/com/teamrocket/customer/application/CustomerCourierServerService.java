@@ -24,6 +24,9 @@ public class CustomerCourierServerService extends CustomerServiceGrpc.CustomerSe
     @Override
     public void getDeliveryData(SystemOrderIdRequest request, StreamObserver<DeliveryDataResponse> responseObserver) {
         int systemOrderId = request.getSystemOrderId();
+
+        log.info("Courier service has initialized a gRPC request for a customer order with system id: " + systemOrderId);
+
         try {
             Optional<CustomerOrderEntity> customerOrderEntity = customerOrderRepository.findCustomerOrderEntityBySystemOrderId(systemOrderId);
             String customerFullName = null;
@@ -38,7 +41,8 @@ public class CustomerCourierServerService extends CustomerServiceGrpc.CustomerSe
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-            log.info("Customer information was successfully fetched with gRPC from restaurant service with system order id: "
+
+            log.info("Customer information was successfully fetched with gRPC from courier service with system order id: "
                     + systemOrderId + " and response body: " + response);
 
         } catch (NoSuchElementException e) {

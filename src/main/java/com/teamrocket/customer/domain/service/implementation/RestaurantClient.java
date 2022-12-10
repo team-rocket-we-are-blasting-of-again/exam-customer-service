@@ -25,7 +25,8 @@ public class RestaurantClient {
 
         List<OrderItem> itemList = new ArrayList();
 
-        log.info("Cart entity used to build an order for restaurant: " + entity);
+        log.info("Cart entity used to calculate total order price in restaurant service: " + entity);
+
         for (int i = 0; i < entity.getItems().size(); i++) {
             CartItemEntity cartItemEntity = entity.getItems().get(i);
             OrderItem orderItemRequest = OrderItem.newBuilder()
@@ -35,11 +36,16 @@ public class RestaurantClient {
                     .build();
             itemList.add(orderItemRequest);
         }
+
         Iterable<OrderItem> itemIterable = itemList;
         orderBuilder.addAllItems(itemIterable);
-        log.info("OrderRequest passed to restaurant: " + orderBuilder);
+
+        log.info("OrderRequest with all items which is send to restaurant service: " + orderBuilder);
+
         Order response = synchronousCall.calculateOrderPrice(orderBuilder.build());
-        log.info("Calculated Cart: ", response.toString());
+
+        log.info("Order response recieved from restaurant service with calculated total order price: ", response.toString());
+
         return response.getTotalPrice();
     }
 }
