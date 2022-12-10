@@ -1,6 +1,7 @@
 package com.teamrocket.customer.domain.service;
 
 import com.teamrocket.customer.domain.model.dto.CustomerDTO;
+import com.teamrocket.customer.domain.model.enums.Topic;
 import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
@@ -19,6 +20,5 @@ public interface ICustomerService {
 
     Map<String, Boolean> deleteCustomer(int id);
 
-//    @Query("SELECT c.name, co.orderPrice FROM Customer c JOIN c.customer_order")
-//    public List<CustomerOrder> getJoinInformation;
+    void notifyCustomer(CustomerDTO customer, Topic kafkaTopic);
 }

@@ -7,6 +7,7 @@ import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
 import com.teamrocket.customer.domain.model.enums.OrderStatus;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface ICustomerOrderService {
     CustomerOrderEntity createCustomerOrder(CustomerDTO customer, NewCustomerOrder data);
@@ -16,6 +17,8 @@ public interface ICustomerOrderService {
     CartEntity addItemToCart(String customerId, CartEntity cartEntity);
 
     String purchaseOrder(String customerId);
+
+    Optional<CustomerOrderEntity> findCustomerOrderBySystemOrderId(int systemOrderId);
 
     Map<String, Boolean> emptyCart(int customerId);
 }

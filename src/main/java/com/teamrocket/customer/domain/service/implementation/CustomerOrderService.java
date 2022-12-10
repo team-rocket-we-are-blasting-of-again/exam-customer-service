@@ -15,7 +15,6 @@ import com.teamrocket.customer.infrastructure.repository.CustomerOrderRepository
 import com.teamrocket.customer.infrastructure.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,16 +32,14 @@ public class CustomerOrderService implements ICustomerOrderService {
 
     private final CustomerRepository customerRepository;
 
-    @Autowired
-    private RestaurantClient restaurantClient;
+    private final RestaurantClient restaurantClient;
 
-    @Autowired
-    private CamundaService camundaService;
+    private final CamundaService camundaService;
 
     @Override
     @Transactional
     public CustomerOrderEntity createCustomerOrder(CustomerDTO customer, NewCustomerOrder data) {
-        // TODO: missing implementation for delivery pricing, should be done in order service
+        // Missing implementation for delivery pricing, should be done in order service
         // and location service to give a price depending on your location
         // for now it is 55kr :)
         data.setDeliveryPrice(55.0);
@@ -80,9 +77,8 @@ public class CustomerOrderService implements ICustomerOrderService {
         cartEntity.setCustomerId(parsedCustomerId);
         CartEntity newCustomerCartEntity = findCartForCustomer(cartEntity);
 
-        log.info("Adding item to customer cart with customer id {} and with cart properties: {}",
-                customerId,
-                cartEntity);
+        log.info("Cart for customer with id {} was found",
+                cartEntity.getCustomerId());
 
         newCustomerCartEntity.setTotalPrice(restaurantClient.restaurantCalculateTotalPrice(cartEntity));
 
@@ -90,7 +86,16 @@ public class CustomerOrderService implements ICustomerOrderService {
 
         for (CartItemEntity item : cartEntity.getItems()) {
             newCustomerCartEntity.getItems().add(item);
+
+            log.info("Adding item {} to cart with with customer id {}",
+                    item,
+                    customerId);
         }
+
+
+        log.info("Customer cart was successfully saved in database with cart properties: {} and customer id: {}",
+                cartEntity,
+                customerId);
 
         return cartRepository.save(newCustomerCartEntity);
     }
@@ -104,13 +109,23 @@ public class CustomerOrderService implements ICustomerOrderService {
         int parsedCustomerId = Integer.parseInt(customerId);
         CartEntity cartEntity = cartRepository.findById(parsedCustomerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer has no active cart with the given id: " + customerId));
-// TODO: empty cart onces payment has been completed
+
+        log.info("Purchase order method from customer order service successfully found customer cart with customer id: {}",
+                customerId);
+
         cartEntity.setCustomerId(parsedCustomerId);
+
+        log.info("Customer id was set on cart entity with customer id: {}",
+                parsedCustomerId);
+
         cartRepository.save(cartEntity);
+
+        log.info("Customer cart was successfully saved in purchase order method in customer order service.");
 
         return camundaService.startOrderProcess(customerId, new NewOrder(cartEntity));
     }
 
+    @Override
     public Optional<CustomerOrderEntity> findCustomerOrderBySystemOrderId(int systemOrderId) {
         Optional<CustomerOrderEntity> customerOrderEntity = Optional.of(customerOrderRepository.findCustomerOrderEntityBySystemOrderId(systemOrderId)
                 .orElseThrow(

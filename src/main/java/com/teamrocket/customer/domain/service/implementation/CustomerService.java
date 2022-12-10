@@ -159,6 +159,7 @@ public class CustomerService implements ICustomerService {
         return response;
     }
 
+    @Override
     public void notifyCustomer(CustomerDTO customer, Topic kafkaTopic) {
         String subject = "";
         String messageBody = "";

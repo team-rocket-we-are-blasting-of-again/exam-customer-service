@@ -1,5 +1,6 @@
 package com.teamrocket.customer.domain.service.implementation;
 
+import com.teamrocket.customer.domain.service.IRestaurantService;
 import com.teamrocket.proto.Order;
 import com.teamrocket.proto.OrderItem;
 import com.teamrocket.proto.RestaurantGrpc;
@@ -14,10 +15,11 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class RestaurantClient {
+public class RestaurantClient implements IRestaurantService {
     @GrpcClient("grpc-restaurant-service")
     private RestaurantGrpc.RestaurantBlockingStub synchronousCall;
 
+    @Override
     public double restaurantCalculateTotalPrice(CartEntity entity) {
         Order.Builder orderBuilder = Order.newBuilder()
                 .setRestaurantId(entity.getRestaurantId())

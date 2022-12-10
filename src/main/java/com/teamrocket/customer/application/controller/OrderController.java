@@ -3,7 +3,6 @@ package com.teamrocket.customer.application.controller;
 import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/orders", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class OrderController {
-    @Autowired
-    CustomerOrderService customerOrderService;
+    private final CustomerOrderService customerOrderService;
 
     /**
      * POST REQUEST

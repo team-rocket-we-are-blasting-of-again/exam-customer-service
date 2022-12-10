@@ -1,6 +1,5 @@
 package com.teamrocket.customer.domain.service.implementation;
 
-
 import com.google.protobuf.Descriptors;
 import com.teamrocket.proto.*;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
@@ -10,7 +9,6 @@ import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,8 +20,7 @@ public class AuthClient implements IAuthClient {
     @GrpcClient("grpc-service")
     private UserGrpc.UserBlockingStub synchronousCall;
 
-    @Autowired
-    private  CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
 
     @Override
@@ -45,7 +42,7 @@ public class AuthClient implements IAuthClient {
         // Getting the response
         CreateUserResponse authServiceResponse = synchronousCall.createUser(authServiceRequest);
 
-        // Process the response appropriately and send it back to the caller - in this case, the StudentService
+        // Process the response and send it back to the caller (auth service)
         return authServiceResponse.getAllFields();
     }
 }
