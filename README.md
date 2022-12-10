@@ -16,9 +16,8 @@
 - clean up entities
 - do not use autowired - use private final @RequiredArgsConstructor
 - interfaces
-- new controller til cart/order - 
-- update email is not allowed - done 
 -
+- update email is not allowed - spørg tobias om det skulle have været i auth service
 - Discuss with group about groupid in kafka listener
 - Order items kan ikke tilføjes til en receipt, da der ikke gemmes order items hos mig. Kun
 - en cart som bliver slettes efter køb. Skulle order service ikke sende hvilke ordre som var med
