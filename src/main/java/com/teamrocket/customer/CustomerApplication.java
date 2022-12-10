@@ -22,7 +22,7 @@ public class CustomerApplication {
     }
 
 
-    // TODO: REMOVE when it is time to deploy
+    // TODO: For testing, remove when moving to production
     @Bean
     CommandLineRunner commandLineRunner(KafkaTemplate<String, Object> kafkaTemplate) {
         return args -> {
@@ -32,6 +32,7 @@ public class CustomerApplication {
         };
     }
 
+    // TODO: For testing, remove when moving to production
     NewCustomerOrder newCustomerOrder = NewCustomerOrder.builder()
             .id(14)
             .restaurantId(1)

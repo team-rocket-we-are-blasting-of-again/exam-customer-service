@@ -1,19 +1,17 @@
 package com.teamrocket.customer.infrastructure.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamrocket.customer.domain.model.dto.*;
-import com.teamrocket.customer.domain.model.entity.CustomerEntity;
 import com.teamrocket.customer.domain.model.entity.CustomerOrderEntity;
 import com.teamrocket.customer.domain.model.enums.OrderStatus;
 import com.teamrocket.customer.domain.model.enums.Topic;
 import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import com.teamrocket.customer.domain.service.implementation.CustomerService;
-import com.teamrocket.customer.domain.service.implementation.KafkaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -21,8 +19,6 @@ import org.springframework.stereotype.Component;
 public class KafkaListeners {
     private final CustomerService customerService;
     private final CustomerOrderService customerOrderService;
-
-    private final ObjectMapper objectMapper;
 
     // TODO: For testing, remove when moving to production
     @KafkaListener(
@@ -40,6 +36,7 @@ public class KafkaListeners {
 
     }
 
+    // TODO: For testing, remove when moving to production
     @KafkaListener(
             topics = "CUSTOMER_NOTIFICATION",
             groupId = "customerId" // Unique id when scaling
@@ -57,24 +54,26 @@ public class KafkaListeners {
             groupId = "new-order-id" // unique id when scaling
     )
     void newOrderPlaceListener(NewCustomerOrder data) {
-//        NewCustomerOrder newCustomerOrder = objectMapper.readValue(dataString, NewCustomerOrder.class);
         // find customer by id
         CustomerDTO customer = customerService.getCustomerById(data.getCustomerId());
+
         log.info("New customer order listener successfully fetched customer with id {} from consumed event with topic {}",
                 data.getCustomerId(),
                 "NEW_ORDER_PLACED");
+
         // create and save customer order
-        // TODO: first find the order in database and
-
-
         CustomerOrderEntity customerOrder = customerOrderService.createCustomerOrder(customer, data);
-
-        customerOrderService.emptyCart(data.getCustomerId());
 
         log.info("New customer order listener successfully stored customer with email {} from consumed event with topic {}",
                 customer.getEmail(),
                 "NEW_ORDER_PLACED");
 
+        customerOrderService.emptyCart(data.getCustomerId());
+
+        log.info("Customers cart with email {} and with a total amount of {} products, was successfully emptied by customer id: {}",
+                customerOrder.getCustomer().getEmail(),
+                customerOrder.getCustomer().getCustomerOrder().size(),
+                customerOrder.getCustomer().getId());
 
         // set status on order in db
         customerOrderService.updateSystemOrder(OrderStatus.PENDING, data.getId());
@@ -83,27 +82,23 @@ public class KafkaListeners {
         customerService.notifyCustomer(customer, Topic.NEW_ORDER_PLACED);
     }
 
+    @KafkaListener(
+            topics = "ORDER_ACCEPTED",
+            groupId = "order-accepted-id" // unique id when scaling
+    )
+    void orderAcceptedListener(SystemOrder data) {
+           // set status on order in db
+        customerOrderService.updateSystemOrder(OrderStatus.IN_PROGRESS, data.getSystemOrderId());
 
-//
-//    @KafkaListener(
-//            topics = "ORDER_ACCEPTED",
-//            groupId = "customerId" // unique id when scaling
-//    )
-//    void orderAcceptedListener(SystemOrder data) {
-//        int systemOrderId = data.getSystemOrderId();
-//
-//        CustomerOrderEntity customerOrder = customerOrderService.updateSystemOrder(OrderStatus.IN_PROGRESS, systemOrderId);
-//
-//        CustomerNotification customerNotification = CustomerNotification.builder()
-//                .email(customerOrder.getCustomer().getEmail())
-//                .subject("MTOGO: Order has been accepted")
-//                .message("Dear " + customerOrder.getCustomer().getFirstName() + " " + customerOrder.getCustomer().getLastName()
-//                        + ",%n" + "Your order has been accepted and creation started at " + customerOrder.getCreatedAt() +
-//                        " and we will inform you when the order is ready.%n")
-//                .build();
-//
-//        kafkaService.customerNotificationEvent(Topic.ORDER_ACCEPTED, customerNotification);
-//    }
+        // find customer with system order id
+        Optional<CustomerOrderEntity> customerOrder = customerOrderService.findCustomerOrderBySystemOrderId(data.getSystemOrderId());
+
+        // built dto out of optional entity
+        CustomerDTO customer = new CustomerDTO(customerOrder);
+
+        // emit customer notification event
+        customerService.notifyCustomer(customer, Topic.CUSTOMER_NOTIFICATION);
+    }
 //
 //    @KafkaListener(
 //            topics = "ORDER_READY",

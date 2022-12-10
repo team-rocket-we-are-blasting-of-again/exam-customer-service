@@ -157,24 +157,55 @@ public class CustomerService implements ICustomerService {
         String subject = "";
         String messageBody = "";
 
-        // TODO: IMPLEMEN LOGGING HERE AS WELL
-        // TODO: Implement all cases
+        log.info("Customer used to notify notification service has the following properties: {}", customer.toString());
+
         switch (kafkaTopic) {
             case NEW_ORDER_PLACED:
                 subject = "MTOGO: New order has been placed";
-                messageBody = "Thank you for your order. We will begin the process of validating your " +
+                messageBody = "Thank you for your order. \nWe will begin the process of validating your " +
                         "order and will keep you updated throughout the whole process.";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_ACCEPTED:
+                subject = "MTOGO: Order has been accepted";
+                messageBody = "Your order has been accepted and preparation has started at " + customer.getCustomerOrderList().get(0).getCreatedAt() +
+                        "\nWe will inform you when the order is ready.";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_READY:
+                subject = "";
+                messageBody = "";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_CANCELED:
+                subject = "";
+                messageBody = "";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_PICKED_UP:
+                subject = "";
+                messageBody = "";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_DELIVERED:
+                subject = "";
+                messageBody = "";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
+                break;
+            case ORDER_CLAIMED:
+                subject = "";
+                messageBody = "";
+                log.info("switch case in customer service was hit with topic: {}", kafkaTopic);
                 break;
             default:
-                // TODO: real error handling implementation
-                throw new RuntimeException("BLABLABLA");
+                log.warn("Switch case in customer service received an unknown kafka topic: {}", kafkaTopic);
+                throw new RuntimeException("An error occurred in customer service when listening on kafka topic: {}" + kafkaTopic);
         }
 
         CustomerNotification customerNotification = CustomerNotification.builder()
                 .email(customer.getEmail())
                 .subject(subject)
-                .message("Dear " + customer.getFirstName() + " " + customer.getLastName()
-                        + ",\n" + messageBody)
+                .message("Dear " + customer.getFirstName() + " " + customer.getLastName() + ",\n" + messageBody)
                 .build();
 
         kafkaService.customerNotificationEvent(customerNotification);

@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -45,11 +47,12 @@ public class CustomerOrderService implements ICustomerOrderService {
     @Transactional
     public CustomerOrderEntity createCustomerOrder(CustomerDTO customer, NewCustomerOrder data) {
         // TODO: missing implementation for delivery pricing, should be done in order service
-        //  for now is 55kr :)
+        // and location service to give a price depending on your location
+        // for now it is 55kr :)
         data.setDeliveryPrice(55.0);
 
         CustomerOrderEntity customerOrder = new CustomerOrderEntity(data);
-        // save customer order
+
         log.info("Customer order entity successfully build in customer order service: {}",
                 customerOrder);
 
@@ -57,18 +60,17 @@ public class CustomerOrderService implements ICustomerOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer was not found with the provided id: "
                         + data.getCustomerId()));
 
+        // add to customer order entity
         customerOrder.setCustomer(customerEntity);
-
+        // add to customer entity
         customerEntity.getCustomerOrder().add(customerOrder);
-
+        // save customer order
         return customerOrderRepository.save(customerOrder);
     }
 
     @Override
     @Transactional
     public int updateSystemOrder(OrderStatus orderStatus, int id) {
-        //TODO: DELETE?
-//        String orderStatusString = String.valueOf(orderStatus);
         log.info("Customer order status updated in customer order service to status {} with system id {}",
                 orderStatus,
                 id);
@@ -109,16 +111,26 @@ public class CustomerOrderService implements ICustomerOrderService {
         return camundaService.startOrderProcess(customerId, new NewOrder(cartEntity));
     }
 
-    // TODO PROBABLY DELETE :(:(:(
-    public Optional<CustomerOrderEntity> findNewCustomerOrder(NewCustomerOrder order) {
-        return Optional.ofNullable(customerOrderRepository.findById(order.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer order was not found with the given customer order id: " + order.getId())
+    public Optional<CustomerOrderEntity> findCustomerOrderBySystemOrderId(int systemOrderId) {
+        Optional<CustomerOrderEntity> customerOrderEntity = Optional.of(customerOrderRepository.findCustomerOrderEntityBySystemOrderId(systemOrderId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Customer order was not found with the given customer order system id: " + systemOrderId)
                 ));
+
+        log.info("Customer order with system order id {} was successfully fetched from customer order service", systemOrderId);
+
+        return customerOrderEntity;
     }
 
     @Override
-    public void emptyCart(int customerId) {
-        // TODO: return true or false
+    public Map<String, Boolean> emptyCart(int customerId) {
         cartRepository.deleteById(customerId);
+
+        log.info("Customer cart was successfully deleted with customer id: {}", customerId);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("Deleted", Boolean.TRUE);
+
+        return response;
     }
 }

@@ -1,8 +1,5 @@
 package com.teamrocket.customer.domain.service.implementation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamrocket.customer.domain.model.dto.CustomerDTO;
 import com.teamrocket.customer.domain.service.IKafkaService;
 import com.teamrocket.customer.domain.model.dto.CustomerNotification;
 import com.teamrocket.customer.domain.model.dto.NewCustomer;
