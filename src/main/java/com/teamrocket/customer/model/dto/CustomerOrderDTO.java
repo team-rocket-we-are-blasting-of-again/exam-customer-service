@@ -17,5 +17,5 @@ public class CustomerOrderDTO {
     private double orderPrice;
     private int restaurantId;
     private int systemOrderId;
-    private OrderStatus status; // TODO: might have to change this to string
+    private OrderStatus status;
 }
