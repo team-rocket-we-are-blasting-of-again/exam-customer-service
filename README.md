@@ -5,11 +5,11 @@
 - BDD
 - TDD
 - Mutation tests
-- flyway or H2
+- H2
+- @Activeprofiles ("integration" or "unit")
 - Cloud contract
 - move classes to the right packages
 - DTO instead of entity
-- @Activeprofiles ("integration" or "unit")
 - add more logging
 - implement serializable
 - clean up entities
