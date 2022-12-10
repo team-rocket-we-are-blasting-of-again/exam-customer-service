@@ -1,18 +1,13 @@
 package com.teamrocket.customer.application.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.teamrocket.customer.domain.model.CartItems;
 import com.teamrocket.customer.domain.model.dto.CustomerDTO;
-import com.teamrocket.customer.domain.model.dto.NewOrder;
 import com.teamrocket.customer.domain.model.CustomerRegistrationRequest;
 import com.teamrocket.customer.domain.model.entity.CartEntity;
-import com.teamrocket.customer.domain.model.entity.CartItemEntity;
 import com.teamrocket.customer.domain.service.implementation.CamundaService;
 import com.teamrocket.customer.domain.service.implementation.CustomerOrderService;
 import com.teamrocket.customer.domain.service.implementation.CustomerService;
 import com.teamrocket.customer.domain.model.entity.CustomerEntity;
-import com.teamrocket.customer.infrastructure.repository.CartRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +33,8 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private CamundaService camundaService;
-
     @Autowired
     CustomerOrderService customerOrderService;
-
-    // TODO: DELETE
-    @Autowired
-    CartRepository cartRepository;
 
 
     /**
@@ -93,13 +83,6 @@ public class CustomerController {
         String customerId = header.get("role_id");
 //        log.info("Get customer by id endpoint was hit with id: {}", customerId);
         return ResponseEntity.ok(customerOrderService.purchaseOrder(customerId));
-    }
-
-    //TODO: DELETE
-    @GetMapping("/carts")
-    public ResponseEntity<CartItemEntity> getCustomerById() {
-        CartItemEntity test = new CartItemEntity();
-        return ResponseEntity.ok(test);
     }
 
     /**

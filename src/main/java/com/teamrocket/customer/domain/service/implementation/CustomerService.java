@@ -118,7 +118,12 @@ public class CustomerService implements ICustomerService {
 
         customer.setFirstName(customerRequest.getFirstName());
         customer.setLastName(customerRequest.getLastName());
-        customer.setEmail(customerRequest.getEmail());
+
+        // updating customer email is not allowed since it needs to be
+        // validated from auth service.
+        // since auth service did not implement this in time the validation check will not take place.
+        // customer.setEmail(customerRequest.getEmail());
+
         customer.setAddressId(customerRequest.getAddressId());
         customer.setPhone(customerRequest.getPhone());
 
