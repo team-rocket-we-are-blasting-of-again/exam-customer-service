@@ -9,8 +9,8 @@
 - Cloud contract
 - move classes to the right packages
 - DTO instead of entity
-- add more logging
 - @Activeprofiles ("integration" or "unit")
+- add more logging
 - implement serializable
 - clean up entities
 - new controller til cart/order
