@@ -1,16 +1,14 @@
 package com.teamrocket.customer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamrocket.customer.domain.model.dto.NewCustomer;
-import com.teamrocket.customer.domain.model.dto.NewCustomerOrder;
-import com.teamrocket.customer.domain.model.enums.OrderStatus;
+import com.teamrocket.customer.model.dto.NewCustomer;
+import com.teamrocket.customer.model.dto.NewCustomerOrder;
+import com.teamrocket.customer.model.enums.OrderStatus;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -34,7 +32,7 @@ public class CustomerApplication {
 
     // TODO: For testing, remove when moving to production
     NewCustomerOrder newCustomerOrder = NewCustomerOrder.builder()
-            .id(14)
+            .id(36)
             .restaurantId(1)
             .customerId(1)
             .createdAt(new Date())

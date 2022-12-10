@@ -29,7 +29,7 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(JsonDeserializer.TYPE_MAPPINGS,
-                "notifyCustomer:com.teamrocket.customer.domain.model.dto.CustomerNotification");
+                "notifyCustomer:com.teamrocket.customer.model.dto.CustomerNotification");
 
         return props;
     }

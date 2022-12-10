@@ -1,6 +1,6 @@
 package com.teamrocket.customer.config.kafka;
 
-import com.teamrocket.customer.domain.model.dto.*;
+import com.teamrocket.customer.model.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,7 +30,7 @@ public class KafkaConsumerConfig {
         StringJsonMessageConverter converter = new StringJsonMessageConverter();
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
-        typeMapper.addTrustedPackages("com.teamrocket.customer.domain.model.dto");
+        typeMapper.addTrustedPackages("com.teamrocket.customer.model.dto");
         Map<String, Class<?>> mappings = new HashMap<>();
         mappings.put("newCustomer", NewCustomer.class);
         mappings.put("notifyCustomer", CustomerNotification.class);

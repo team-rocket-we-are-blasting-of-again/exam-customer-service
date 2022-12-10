@@ -242,7 +242,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>
-                        com.teamrocket.customer.application.controller.CustomerController
+                        com.teamrocket.customer.controller.CustomerController
                     </baseClassForTests>
                 </configuration>
             </plugin>
