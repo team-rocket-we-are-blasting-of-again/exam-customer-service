@@ -1,28 +1,31 @@
 package com.teamrocket.customer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamrocket.customer.domain.model.dto.NewCustomer;
-import com.teamrocket.customer.domain.model.dto.NewCustomerOrder;
-import com.teamrocket.customer.domain.model.enums.OrderStatus;
+import com.teamrocket.customer.model.dto.NewCustomer;
+import com.teamrocket.customer.model.dto.NewCustomerOrder;
+import com.teamrocket.customer.model.enums.OrderStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Slf4j
 @SpringBootApplication
 public class CustomerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CustomerApplication.class, args);
+        log.info("Spring application was successfully started: {}",
+                LocalTime.now());
     }
 
 
-    // TODO: REMOVE when it is time to deploy
+    // TODO: For testing, remove when moving to production
     @Bean
     CommandLineRunner commandLineRunner(KafkaTemplate<String, Object> kafkaTemplate) {
         return args -> {
@@ -32,8 +35,9 @@ public class CustomerApplication {
         };
     }
 
+    // TODO: For testing, remove when moving to production
     NewCustomerOrder newCustomerOrder = NewCustomerOrder.builder()
-            .id(14)
+            .id(36)
             .restaurantId(1)
             .customerId(1)
             .createdAt(new Date())

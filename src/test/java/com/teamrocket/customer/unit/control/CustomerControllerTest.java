@@ -1,7 +1,7 @@
 package com.teamrocket.customer.unit.control;
 
-import com.teamrocket.customer.application.controller.CustomerController;
-import com.teamrocket.customer.domain.service.implementation.CustomerService;
+import com.teamrocket.customer.controller.CustomerController;
+import com.teamrocket.customer.service.implementation.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

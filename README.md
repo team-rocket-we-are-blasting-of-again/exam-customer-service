@@ -2,19 +2,20 @@
 
 ### TO DO:
 
+- Deploy service in kubernetes cluster
+- comment out commandline runners
+- comment out kafka listeners for testing
+- comment out logging info in app properties for more logging when deployed
+- 
 - BDD
 - TDD
 - Mutation tests
-- flyway or H2
-- Cloud contract
-- move classes to the right packages
-- DTO instead of entity
-- add more logging
+- H2
 - @Activeprofiles ("integration" or "unit")
-- implement serializable
-- clean up entities
-- new controller til cart/order
-- update email is not allowed
-- switch case complete
-- gRPC med restaurant service to update the price of a customer order
+- Cloud contract
+-
+- Discuss with group about groupid in kafka listener
+- Order items kan ikke tilføjes til en receipt, da der ikke gemmes order items hos mig. Kun
+- en cart som bliver slettes efter køb. Skulle order service ikke sende hvilke ordre som var med
+- på et køb?
 

@@ -1,19 +1,15 @@
 package com.teamrocket.customer.config.kafka;
 
-import com.teamrocket.customer.domain.model.dto.*;
-import com.teamrocket.customer.util.KafkaUtil;
+import com.teamrocket.customer.model.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
@@ -34,7 +30,7 @@ public class KafkaConsumerConfig {
         StringJsonMessageConverter converter = new StringJsonMessageConverter();
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
-        typeMapper.addTrustedPackages("com.teamrocket.customer.domain.model.dto");
+        typeMapper.addTrustedPackages("com.teamrocket.customer.model.dto");
         Map<String, Class<?>> mappings = new HashMap<>();
         mappings.put("newCustomer", NewCustomer.class);
         mappings.put("notifyCustomer", CustomerNotification.class);
