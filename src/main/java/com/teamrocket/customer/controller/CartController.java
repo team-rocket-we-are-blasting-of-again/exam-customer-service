@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:8012") //open for specific port
 @CrossOrigin() // open for all ports
 @RestController
 @RequestMapping(path = "/carts", produces = {MediaType.APPLICATION_JSON_VALUE})

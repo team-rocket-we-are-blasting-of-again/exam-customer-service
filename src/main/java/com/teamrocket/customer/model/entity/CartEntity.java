@@ -19,7 +19,6 @@ public class CartEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     // Does not need auto generation since I set customer id on a cart entity before it is saved to a customer
     @Column(name = "customer_id", unique = true, nullable = false)
     private int customerId;
