@@ -14,8 +14,3 @@
 - @Activeprofiles ("integration" or "unit")
 - Cloud contract
 -
-- Discuss with group about groupid in kafka listener
-- Order items kan ikke tilføjes til en receipt, da der ikke gemmes order items hos mig. Kun
-- en cart som bliver slettes efter køb. Skulle order service ikke sende hvilke ordre som var med
-- på et køb?
-
