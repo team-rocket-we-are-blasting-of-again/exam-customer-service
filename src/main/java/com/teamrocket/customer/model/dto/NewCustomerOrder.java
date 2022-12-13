@@ -18,7 +18,7 @@ public class NewCustomerOrder {
     private int customerId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
-    private OrderStatus status; // TODO: might have to change this to string
+    private OrderStatus status;
     private boolean withDelivery;
     private double deliveryPrice;
     private double totalPrice;
