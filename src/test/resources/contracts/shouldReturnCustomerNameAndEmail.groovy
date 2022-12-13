@@ -1,3 +1,5 @@
+package contracts
+
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
@@ -6,7 +8,7 @@ Contract.make {
         method POST()
         url("/api/v1/customers") {
             body(
-                    firstName:"JP",
+                    firstName: "JP",
                     lastName: "LM",
                     email: "customer@service.com"
             )
@@ -14,6 +16,5 @@ Contract.make {
     }
     response {
         status 200
-
     }
 }

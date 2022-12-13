@@ -1,12 +1,8 @@
-# Spring_Rest_Template
+# Customer service
 
-TO DO:
-  - cucumber
-  - pipeline integration
-  - pmd (mutation tets)
-  - jacoco
-  - pitest
-  - docker integration
-  - logging
-  - flyway
-  - discuss test types amd levels
+## Contains
+- gRPC
+- REST
+- Kafka
+
+

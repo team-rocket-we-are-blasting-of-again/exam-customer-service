@@ -1,4 +1,4 @@
-package com.teamrocket.customer.dto;
+package com.teamrocket.customer.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,7 @@ public class TemplateDTO {
     private int id;
     private String msg;
 
+    // TODO: DELETE CLASS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

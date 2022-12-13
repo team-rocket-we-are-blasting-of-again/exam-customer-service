@@ -1,14 +1,39 @@
 version: "3.9"
 
 services:
+  camunda-postgres:
+    container_name: camunda_postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      customer:
+  camunda:
+    container_name: camunda
+    image: tobiaszimmer/exam-camunda-server:processUpdate-0.0.3
+    ports:
+      - "8080:8080"
+    environment:
+      DB_CONNECTION_STR: jdbc:postgresql://camunda-postgres:5432/postgres
+      DB_USERNAME: postgres
+      DB_POSTGRES: postgres
+      CAMUNDA_ADMIN_USERNAME: demo
+      CAMUNDA_ADMIN_PASSWORD: demo
+      CAMUNDA_ADMIN_EMAIL: test@test.dk
+      CAMUNDA_ADMIN_FIRSTNAME: admin
+      CAMUNDA_ADMIN_LASTNAME: admin
+    networks:
+      customer:
+
   zookeeper:
     image: bitnami/zookeeper:latest
     ports:
       - "2181:2181"
     environment:
-      ALLOW_ANONYMOUS_LOGIN: yes
+      ALLOW_ANONYMOUS_LOGIN: "yes"
     networks:
-      postgres:
+      customer:
   kafka:
     image: bitnami/kafka:latest
     ports:
@@ -19,9 +44,9 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_LISTENERS: PLAINTEXT://:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      ALLOW_PLAINTEXT_LISTENER: yes
+      ALLOW_PLAINTEXT_LISTENER: "yes"
     networks:
-      postgres:
+      customer:
 
   postgres:
     container_name: postgres
@@ -35,7 +60,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - customer
     restart: unless-stopped
 
   pgadmin:
@@ -51,44 +76,57 @@ services:
     ports:
       - "5050:80"
     networks:
-      - postgres
+      - customer
     restart: unless-stopped
 
+  auth-postgres:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth
+    networks:
+      customer:
+
+  auth-service:
+    depends_on:
+      - auth-postgres
+    image: tobiaszimmer/exam_auth_service:feat-0.1.0
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      POSTGRES_HOST: auth-postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: auth
+      TOKEN_DURATION_HOURS: 12
+      HAS_GATEWAY: "false"
+    networks:
+      customer:
+
+  postgres_db:
+    image: postgres:14.1-alpine
+    restart: always
+    hostname: postgres
+    container_name: exam_restaurant_service_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Qwerty!234
+      - POSTGRES_DB=restaurants
+    ports:
+      - '6969:5432'
+    networks:
+      customer:
+
 networks:
-  postgres:
+  customer:
     driver: bridge
-    #external: true
+  # external: true
 
 volumes:
   postgres:
   pgadmin:
   zookeeper:
   kafka:
-#
-#services:
-#  customer:
-#    image: teamrocket-customer-service:1.0
-#    container_name: customer-service
-#    depends_on:
-#      - customerdb
-#    ports:
-#      - "8012:8012"
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://customerdb:5432/postgres
-#      - SPRING_DATASOURCE_USERNAME=postgres
-#      - SPRING_DATASOURCE_PASSWORD=postgres
-#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-#    networks:
-#      school:
-#  customerdb:
-#    image: postgres:13.1-alpine
-#    container_name: customerdb
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    networks:
-#      mtogo:
-#
-#networks:
-#  mtogo:
-#    external: true

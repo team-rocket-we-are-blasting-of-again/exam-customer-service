@@ -1,6 +1,6 @@
 package com.teamrocket.customer.contract.producer;
 
-import com.teamrocket.customer.control.CustomerController;
+import com.teamrocket.customer.controller.CustomerController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.Before;
 import org.junit.runner.RunWith;

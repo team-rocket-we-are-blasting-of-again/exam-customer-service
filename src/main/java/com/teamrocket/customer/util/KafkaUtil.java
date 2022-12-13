@@ -1,4 +1,4 @@
-package com.teamrocket.customer.config;
+package com.teamrocket.customer.util;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -18,7 +18,6 @@ import java.util.Map;
 
 @Component
 public class KafkaUtil {
-
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapService;
 
@@ -35,7 +34,7 @@ public class KafkaUtil {
                 new JsonDeserializer<>(clazz)
         );
     }
-
+    
     public <T> ProducerFactory<String, T> createClassProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapService);

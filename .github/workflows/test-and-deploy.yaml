@@ -22,8 +22,8 @@ jobs:
       - name: Run integration tests
         run: mvn verify
 
-      - name: Run mutation tests
-        run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
+#      - name: Run mutation tests
+#        run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
 
       - name: Package
         run: mvn package -Dmaven.test.skip=true
