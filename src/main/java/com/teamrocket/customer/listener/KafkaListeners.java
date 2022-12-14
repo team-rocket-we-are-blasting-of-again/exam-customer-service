@@ -20,32 +20,6 @@ public class KafkaListeners {
     private final CustomerService customerService;
     private final CustomerOrderService customerOrderService;
 
-    // TODO: For testing, remove when moving to production
-    @KafkaListener(
-            topics = "NEW_CUSTOMER",
-            groupId = "customerId" // Unique id when scaling
-    )
-    void listener(NewCustomer data) {
-        System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s%n%s%n%s%n: ",
-                data.getFirstName(),
-                data.getLastName(),
-                data.getEmail(),
-                data.getAddressId(),
-                data.getPhone());
-    }
-
-    // TODO: For testing, remove when moving to production
-    @KafkaListener(
-            topics = "CUSTOMER_NOTIFICATION",
-            groupId = "customerId" // Unique id when scaling
-    )
-    void customerNotificationListener(CustomerNotification data) {
-        System.out.printf("Topic: NEW_CUSTOMER listener received %n%s%n%s%n%s: ",
-                data.getEmail(),
-                data.getSubject(),
-                data.getMessage());
-    }
-
     @KafkaListener(
             topics = "NEW_ORDER_PLACED",
             groupId = "new-order-id" // unique id when scaling
