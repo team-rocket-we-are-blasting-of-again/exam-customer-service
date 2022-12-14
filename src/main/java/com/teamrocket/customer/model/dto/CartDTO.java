@@ -29,5 +29,6 @@ public class CartDTO {
                         .quantity(item.getQuantity())
                         .build())
                 .toList();
+        this.totalPrice = cart.getTotalPrice();
     }
 }

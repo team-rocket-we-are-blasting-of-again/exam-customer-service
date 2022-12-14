@@ -120,6 +120,18 @@ services:
     networks:
       customer:
 
+  postgres_order:
+    container_name: postgres_order_mtogo
+    image: postgres:latest
+    ports:
+      - "5445:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    networks:
+      customer:
+
 networks:
   customer:
     driver: bridge
