@@ -4,6 +4,12 @@
     "forwardUri": "http://customer:8012",
     "routePathDto": [
       {
+        "path": "/customers/v1/customers/registration",
+        "method": "NONE",
+        "httpMethod": "POST",
+        "rolesAllowed": []
+      },
+      {
         "path": "/customers/v1/actuator/**",
         "method": "BASIC",
         "rolesAllowed": []
