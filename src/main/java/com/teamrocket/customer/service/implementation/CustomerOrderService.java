@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -121,6 +122,9 @@ public class CustomerOrderService implements ICustomerOrderService {
                 parsedCustomerId);
 
         CustomerOrderEntity order = new CustomerOrderEntity(cartEntity);
+        order.setCreatedAt(new Date());
+        order.setDeliveryPrice(39.00);
+        order.setStatus(OrderStatus.PENDING);
         customerOrderRepository.save(order);
         cartRepository.delete(cartEntity);
 

@@ -35,4 +35,5 @@ public class CartEntity implements Serializable {
     private double totalPrice;
     @Column(name = "delivery")
     private boolean withDelivery;
+
 }
