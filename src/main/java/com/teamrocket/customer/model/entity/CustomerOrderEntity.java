@@ -42,7 +42,7 @@ public class CustomerOrderEntity implements Serializable {
     private double orderPrice;
     @Column(name = "restaurant_id", nullable = false)
     private int restaurantId;
-    @Column(name = "system_order_id", nullable = false, unique = true)
+    @Column(name = "system_order_id")
     private int systemOrderId;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
