@@ -1,5 +1,6 @@
 package com.teamrocket.customer.service.implementation;
 
+import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.model.dto.CartDTO;
 import com.teamrocket.customer.model.dto.CustomerDTO;
 import com.teamrocket.customer.model.dto.NewCustomerOrder;
@@ -9,11 +10,10 @@ import com.teamrocket.customer.model.entity.CartItemEntity;
 import com.teamrocket.customer.model.entity.CustomerEntity;
 import com.teamrocket.customer.model.entity.CustomerOrderEntity;
 import com.teamrocket.customer.model.enums.OrderStatus;
-import com.teamrocket.customer.service.ICustomerOrderService;
-import com.teamrocket.customer.exceptions.ResourceNotFoundException;
 import com.teamrocket.customer.repository.CartRepository;
 import com.teamrocket.customer.repository.CustomerOrderRepository;
 import com.teamrocket.customer.repository.CustomerRepository;
+import com.teamrocket.customer.service.ICustomerOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -120,7 +120,9 @@ public class CustomerOrderService implements ICustomerOrderService {
         log.info("Customer id was set on cart entity with customer id: {}",
                 parsedCustomerId);
 
-        cartRepository.save(cartEntity);
+        CustomerOrderEntity order = new CustomerOrderEntity(cartEntity);
+        customerOrderRepository.save(order);
+        cartRepository.delete(cartEntity);
 
         log.info("Customer cart was successfully saved in purchase order method in customer order service.");
 
