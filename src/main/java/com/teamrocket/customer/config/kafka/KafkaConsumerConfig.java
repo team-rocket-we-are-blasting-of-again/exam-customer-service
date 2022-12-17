@@ -32,13 +32,9 @@ public class KafkaConsumerConfig {
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
         typeMapper.addTrustedPackages("com.teamrocket.customer.model.dto");
         Map<String, Class<?>> mappings = new HashMap<>();
-        mappings.put("newCustomer", NewCustomer.class);
-        mappings.put("notifyCustomer", CustomerNotification.class);
-        mappings.put("newCustomerOrder", NewCustomerOrder.class);
-        mappings.put("systemOrder", SystemOrder.class);
-        mappings.put("orderCancelled", OrderCancelled.class);
-        mappings.put("newOrder", NewOrder.class);
-        mappings.put("newCustomer", NewCustomer.class);
+        mappings.put("newOrder", NewCustomerOrder.class);
+        mappings.put("orderkafkamsg", SystemOrder.class);
+        mappings.put("ordercancelled", OrderCancelled.class);
         typeMapper.setIdClassMapping(mappings);
         converter.setTypeMapper(typeMapper);
         return converter;
