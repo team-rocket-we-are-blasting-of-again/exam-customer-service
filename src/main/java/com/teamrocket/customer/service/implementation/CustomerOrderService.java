@@ -78,6 +78,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                 cartEntity.getCustomerId());
 
         newCustomerCartEntity.setTotalPrice(restaurantClient.restaurantCalculateTotalPrice(cartEntity));
+        newCustomerCartEntity.setWithDelivery(cartEntity.isWithDelivery());
 
         newCustomerCartEntity.getItems().clear();
 
