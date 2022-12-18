@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -121,17 +120,13 @@ public class CustomerOrderService implements ICustomerOrderService {
         log.info("Customer id was set on cart entity with customer id: {}",
                 parsedCustomerId);
 
-        CustomerOrderEntity order = new CustomerOrderEntity(cartEntity);
-        order.setCreatedAt(new Date());
-        order.setDeliveryPrice(39.00);
-        order.setStatus(OrderStatus.PENDING);
-        customerOrderRepository.save(order);
-        cartRepository.delete(cartEntity);
+        cartRepository.save(cartEntity);
 
         log.info("Customer cart was successfully saved in purchase order method in customer order service.");
 
         return camundaService.startOrderProcess(customerId, new NewOrder(cartEntity));
     }
+
 
     @Override
     public Optional<CustomerOrderEntity> findCustomerOrderBySystemOrderId(int systemOrderId) {
