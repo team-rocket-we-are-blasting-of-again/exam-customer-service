@@ -23,14 +23,14 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     public Map<String, Object> producerConfig() {
-        HashMap<String, Object> props = new HashMap();
+        HashMap<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(JsonDeserializer.TYPE_MAPPINGS,
                 "notifyCustomer:com.teamrocket.customer.model.dto.CustomerNotification," +
-                        "newOrder:com.teamrocket.customer.model.dto.NewOrder," +
+                        "newCustomerOrder:com.teamrocket.customer.model.dto.NewOrder," +
                         "newCustomer:com.teamrocket.customer.model.dto.NewCustomer");
 
         return props;

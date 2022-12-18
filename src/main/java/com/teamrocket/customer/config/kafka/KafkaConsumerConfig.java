@@ -39,7 +39,8 @@ public class KafkaConsumerConfig {
         mappings.put("orderCancelled", OrderCancelled.class);
         mappings.put("newOrder", NewCustomerOrder.class);
         mappings.put("newOrderItem", OrderItem.class);
-        mappings.put("newCustomer", NewCustomer.class);
+        mappings.put("orderkafkamsg", SystemOrder.class);
+        mappings.put("ordercancelled", OrderCancelled.class);
         typeMapper.setIdClassMapping(mappings);
         converter.setTypeMapper(typeMapper);
         return converter;
