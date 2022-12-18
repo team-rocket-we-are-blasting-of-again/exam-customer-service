@@ -30,5 +30,6 @@ public class CartDTO {
                         .build())
                 .toList();
         this.totalPrice = cart.getTotalPrice();
+        this.withDelivery = cart.isWithDelivery();
     }
 }
